@@ -1,13 +1,6 @@
 name: pre-commit
 
-on:
-  pull_request:
-    branches:
-      - "15.0*"
-  push:
-    branches:
-      - "15.0"
-      - "15.0-ocabot-*"
+on: push
 
 jobs:
   pre-commit:

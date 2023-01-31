@@ -8,6 +8,7 @@ on:
     branches:
       - "15.0"
       - "15.0-ocabot-*"
+      - "15.0-develop*"
 
 jobs:
   unreleased-deps:

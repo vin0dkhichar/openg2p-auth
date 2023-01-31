@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_g2p_id_oidc_provider_form">
+        <field name="name">g2p.auth.id.oidc.provider.form</field>
+        <field name="model">auth.oauth.provider</field>
+        <field name="inherit_id" ref="auth_oidc.view_oidc_provider_form" />
+        <field name="arch" type="xml">
+            <field name="flow" position="after">
+                <field name="redirect_url" />
+            </field>
+            <field name="client_secret" position="after">
+                <field name="client_assertion_type" />
+                <field name="client_assertion" />
+            </field>
+            <sheet position="inside">
+                <group string="G2P Reg ID Settings">
+                    <field name="g2p_oidc_id_to_use" />
+                    <field name="g2p_id_type" attrs="{'invisible':[('g2p_oidc_id_to_use','!=',True)]}" />
+                    <field
+                        name="partner_creation_call_validate_url"
+                        attrs="{'invisible':[('g2p_oidc_id_to_use','!=',True)]}"
+                    />
+                    <field
+                        name="partner_creation_validate_response_mapping"
+                        attrs="{'invisible':[('g2p_oidc_id_to_use','!=',True)]}"
+                    />
+                    <field
+                        name="login_attribute_mapping_on_user_creation"
+                        attrs="{'invisible':[('g2p_oidc_id_to_use','!=',True)]}"
+                    />
+                </group>
+            </sheet>
+        </field>
+    </record>
+</odoo>
