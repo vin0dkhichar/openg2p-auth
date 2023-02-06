@@ -5,9 +5,6 @@
         <field name="model">auth.oauth.provider</field>
         <field name="inherit_id" ref="auth_oidc.view_oidc_provider_form" />
         <field name="arch" type="xml">
-            <field name="flow" position="after">
-                <field name="redirect_url" />
-            </field>
             <field name="client_secret" position="after">
                 <field name="client_assertion_type" />
                 <field name="client_assertion" />

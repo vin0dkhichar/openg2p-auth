@@ -11,8 +11,6 @@ except ImportError:
 class G2PAuthIDOidcProvider(models.Model):
     _inherit = "auth.oauth.provider"
 
-    redirect_url = fields.Char(required=None)
-
     g2p_oidc_id_to_use = fields.Boolean("Use G2P Reg ID", default=False)
     g2p_id_type = fields.Many2one(
         "g2p.id.type", "G2P Registrant ID Type", required=False

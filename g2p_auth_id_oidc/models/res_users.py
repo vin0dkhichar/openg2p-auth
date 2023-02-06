@@ -33,8 +33,7 @@ class ResUsers(models.Model):
                     grant_type="authorization_code",
                     code=code,
                     code_verifier=oauth_provider.code_verifier,  # PKCE
-                    redirect_uri=oauth_provider.redirect_url
-                    or request.httprequest.url_root + "auth_oauth/signin",
+                    redirect_uri=request.httprequest.url_root + "auth_oauth/signin",
                 ),
             )
         else:
@@ -48,8 +47,7 @@ class ResUsers(models.Model):
                     grant_type="authorization_code",
                     code=code,
                     code_verifier=oauth_provider.code_verifier,  # PKCE
-                    redirect_uri=oauth_provider.get("redirect_url", None)
-                    or request.httprequest.url_root + "auth_oauth/signin",
+                    redirect_uri=request.httprequest.url_root + "auth_oauth/signin",
                 ),
                 auth=auth,
             )
