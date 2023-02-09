@@ -22,6 +22,10 @@
                         attrs="{'invisible':[('g2p_oidc_id_to_use','!=',True)]}"
                     />
                     <field
+                        name="default_group_user_creation"
+                        attrs="{'invisible':[('g2p_oidc_id_to_use','!=',True)]}"
+                    />
+                    <field
                         name="login_attribute_mapping_on_user_creation"
                         attrs="{'invisible':[('g2p_oidc_id_to_use','!=',True)]}"
                     />
