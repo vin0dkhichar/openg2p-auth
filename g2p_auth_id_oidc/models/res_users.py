@@ -19,44 +19,44 @@ _logger = logging.getLogger(__name__)
 class ResUsers(models.Model):
     _inherit = "res.users"
 
-    def _auth_oauth_get_tokens_auth_code_flow(self, oauth_provider, params):
-        # https://openid.net/specs/openid-connect-core-1_0.html#AuthResponse
-        code = params.get("code")
-        # https://openid.net/specs/openid-connect-core-1_0.html#TokenRequest
-        if oauth_provider.client_assertion_type:
-            response = requests.post(
-                oauth_provider.token_endpoint,
-                data=dict(
-                    client_id=oauth_provider.client_id,
-                    client_assertion=oauth_provider.client_assertion,
-                    client_assertion_type=oauth_provider.client_assertion_type,
-                    grant_type="authorization_code",
-                    code=code,
-                    code_verifier=oauth_provider.code_verifier,  # PKCE
-                    redirect_uri=request.httprequest.url_root + "auth_oauth/signin",
-                ),
-            )
-        else:
-            auth = None
-            if oauth_provider.client_secret:
-                auth = (oauth_provider.client_id, oauth_provider.client_secret)
-            response = requests.post(
-                oauth_provider.token_endpoint,
-                data=dict(
-                    client_id=oauth_provider.client_id,
-                    grant_type="authorization_code",
-                    code=code,
-                    code_verifier=oauth_provider.code_verifier,  # PKCE
-                    redirect_uri=request.httprequest.url_root + "auth_oauth/signin",
-                ),
-                auth=auth,
-            )
-        response.raise_for_status()
-        response_json = response.json()
-        # https://openid.net/specs/openid-connect-core-1_0.html#TokenResponse
-        _logger.info("Here is access token %s", response_json.get("access_token"))
-        _logger.info("Here is id token %s", response_json.get("id_token"))
-        return response_json.get("access_token"), response_json.get("id_token")
+    # def _auth_oauth_get_tokens_auth_code_flow(self, oauth_provider, params):
+    #     # https://openid.net/specs/openid-connect-core-1_0.html#AuthResponse
+    #     code = params.get("code")
+    #     # https://openid.net/specs/openid-connect-core-1_0.html#TokenRequest
+    #     if oauth_provider.client_assertion_type:
+    #         response = requests.post(
+    #             oauth_provider.token_endpoint,
+    #             data=dict(
+    #                 client_id=oauth_provider.client_id,
+    #                 client_assertion=oauth_provider.client_assertion,
+    #                 client_assertion_type=oauth_provider.client_assertion_type,
+    #                 grant_type="authorization_code",
+    #                 code=code,
+    #                 code_verifier=oauth_provider.code_verifier,  # PKCE
+    #                 redirect_uri=request.httprequest.url_root + "auth_oauth/signin",
+    #             ),
+    #         )
+    #     else:
+    #         auth = None
+    #         if oauth_provider.client_secret:
+    #             auth = (oauth_provider.client_id, oauth_provider.client_secret)
+    #         response = requests.post(
+    #             oauth_provider.token_endpoint,
+    #             data=dict(
+    #                 client_id=oauth_provider.client_id,
+    #                 grant_type="authorization_code",
+    #                 code=code,
+    #                 code_verifier=oauth_provider.code_verifier,  # PKCE
+    #                 redirect_uri=request.httprequest.url_root + "auth_oauth/signin",
+    #             ),
+    #             auth=auth,
+    #         )
+    #     response.raise_for_status()
+    #     response_json = response.json()
+    #     # https://openid.net/specs/openid-connect-core-1_0.html#TokenResponse
+    #     _logger.info("Here is access token %s", response_json.get("access_token"))
+    #     _logger.info("Here is id token %s", response_json.get("id_token"))
+    #     return response_json.get("access_token"), response_json.get("id_token")
 
     @api.model
     def _auth_oauth_signin(self, provider, validation, params):

@@ -32,17 +32,17 @@ class G2PAuthIDOidcProvider(models.Model):
     # static_login_user = fields.Many2one("res.users", "Static User for login", required=False, default=None)
     # enforce_static_login_user = fields.Boolean("Use Static User by default for Login", required=False, default=False)
 
-    client_assertion_type = fields.Selection(
-        [
-            (
-                "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-                "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-            )
-        ],
-        required=False,
-    )
+    # client_assertion_type = fields.Selection(
+    #     [
+    #         (
+    #             "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+    #             "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+    #         )
+    #     ],
+    #     required=False,
+    # )
 
-    client_assertion = fields.Char(required=False)
+    # client_assertion = fields.Char(required=False)
 
     def _parse_id_token(self, id_token, access_token):
         # This method is only reimplemented here temporarily. To prevent atHash validation
