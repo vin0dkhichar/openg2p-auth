@@ -101,16 +101,22 @@ class ResUsers(models.Model):
         oauth_uid = validation["user_id"]
         login_attr = oauth_provider.login_attribute_mapping_on_user_creation
         login = validation.get(login_attr, oauth_uid)
-        return self.env["res.users"].create(
-            {
-                "login": login,
-                "partner_id": partner.id,
-                "oauth_provider_id": oauth_provider.id,
-                "oauth_uid": oauth_uid,
-                "oauth_access_token": params["access_token"],
-                "active": True,
-            }
-        )
+        user_creation_dict = {
+            "login": login,
+            "partner_id": partner.id,
+            "oauth_provider_id": oauth_provider.id,
+            "oauth_uid": oauth_uid,
+            "oauth_access_token": params["access_token"],
+            "active": True,
+        }
+        if oauth_provider.default_group_user_creation:
+            user_creation_dict["groups_id"] = [
+                (
+                    4,
+                    oauth_provider.default_group_user_creation.id,
+                ),
+            ]
+        return self.env["res.users"].create(user_creation_dict)
 
     def generate_partner_signup(self, oauth_provider, validation, params):
         oauth_uid = validation["user_id"]

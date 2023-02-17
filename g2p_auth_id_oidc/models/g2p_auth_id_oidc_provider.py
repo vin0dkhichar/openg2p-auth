@@ -23,6 +23,12 @@ class G2PAuthIDOidcProvider(models.Model):
         help="Map Fields from Validation_url response while Partner Creation",
         default=False,
     )
+    default_group_user_creation = fields.Many2one(
+        "res.groups",
+        help="This will be set as default group on user creation",
+        default=False,
+        required=False,
+    )
     login_attribute_mapping_on_user_creation = fields.Char(
         help="Map login attribure from validation response on User Creation",
         default=False,
