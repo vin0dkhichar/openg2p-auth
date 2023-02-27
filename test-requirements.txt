@@ -1,0 +1,3 @@
+git+https://github.com/OpenG2P/server-auth@15.0#subdirectory=setup/auth_oidc
+git+https://github.com/OpenG2P/openg2p-registry@15.0-develop#subdirectory=setup/g2p_registry_base
+git+https://github.com/OpenG2P/openg2p-registry@15.0-develop#subdirectory=setup/g2p_registry_individual
