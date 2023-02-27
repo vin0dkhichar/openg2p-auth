@@ -1,12 +1,12 @@
 import json
 import logging
+from datetime import datetime
 
 import requests
 import werkzeug.http
 
 from odoo import api, models
 from odoo.exceptions import AccessDenied
-from odoo.http import request
 
 try:
     from jose import jwt
@@ -18,45 +18,6 @@ _logger = logging.getLogger(__name__)
 
 class ResUsers(models.Model):
     _inherit = "res.users"
-
-    # def _auth_oauth_get_tokens_auth_code_flow(self, oauth_provider, params):
-    #     # https://openid.net/specs/openid-connect-core-1_0.html#AuthResponse
-    #     code = params.get("code")
-    #     # https://openid.net/specs/openid-connect-core-1_0.html#TokenRequest
-    #     if oauth_provider.client_assertion_type:
-    #         response = requests.post(
-    #             oauth_provider.token_endpoint,
-    #             data=dict(
-    #                 client_id=oauth_provider.client_id,
-    #                 client_assertion=oauth_provider.client_assertion,
-    #                 client_assertion_type=oauth_provider.client_assertion_type,
-    #                 grant_type="authorization_code",
-    #                 code=code,
-    #                 code_verifier=oauth_provider.code_verifier,  # PKCE
-    #                 redirect_uri=request.httprequest.url_root + "auth_oauth/signin",
-    #             ),
-    #         )
-    #     else:
-    #         auth = None
-    #         if oauth_provider.client_secret:
-    #             auth = (oauth_provider.client_id, oauth_provider.client_secret)
-    #         response = requests.post(
-    #             oauth_provider.token_endpoint,
-    #             data=dict(
-    #                 client_id=oauth_provider.client_id,
-    #                 grant_type="authorization_code",
-    #                 code=code,
-    #                 code_verifier=oauth_provider.code_verifier,  # PKCE
-    #                 redirect_uri=request.httprequest.url_root + "auth_oauth/signin",
-    #             ),
-    #             auth=auth,
-    #         )
-    #     response.raise_for_status()
-    #     response_json = response.json()
-    #     # https://openid.net/specs/openid-connect-core-1_0.html#TokenResponse
-    #     _logger.info("Here is access token %s", response_json.get("access_token"))
-    #     _logger.info("Here is id token %s", response_json.get("id_token"))
-    #     return response_json.get("access_token"), response_json.get("id_token")
 
     @api.model
     def _auth_oauth_signin(self, provider, validation, params):
@@ -170,6 +131,10 @@ class ResUsers(models.Model):
                 partner_dict["addl_name"],
             )
             partner_dict["gender"] = self.process_gender(validation.get("gender", ""))
+            partner_dict["birthdate"] = self.process_birthdate(
+                validation.get("birthdate", None),
+                date_format=oauth_provider.partner_creation_date_format,
+            )
             partner_dict["reg_ids"] = self.process_ids(
                 oauth_provider.g2p_id_type, oauth_uid
             )
@@ -180,8 +145,6 @@ class ResUsers(models.Model):
                 partner_dict["phone"] = primary_phone
             if phone_numbers:
                 partner_dict["phone_number_ids"] = phone_numbers
-            if validation.get("birthdate", None):
-                partner_dict["birthdate"] = validation["birthdate"]
 
             return self.env["res.partner"].create(partner_dict)
 
@@ -222,6 +185,11 @@ class ResUsers(models.Model):
     def process_gender(self, gender):
         return gender.capitalize()
 
+    def process_birthdate(self, birthdate, date_format="%Y/%m/%d"):
+        if not birthdate:
+            return None
+        return datetime.strptime(birthdate, date_format).date()
+
     def process_name(self, family_name, given_name, addl_name):
         name = ""
         if family_name:
@@ -232,7 +200,7 @@ class ResUsers(models.Model):
             name += addl_name + " "
         return name.upper()
 
-    def process_ids(self, id_type, id_value, status=None, error=None, expiry_date=None):
+    def process_ids(self, id_type, id_value, expiry_date=None):
         return [
             (
                 0,
@@ -241,8 +209,6 @@ class ResUsers(models.Model):
                     "id_type": id_type.id,
                     "value": id_value,
                     "expiry_date": expiry_date,
-                    "status": status,
-                    "error": error,
                 },
             )
         ]

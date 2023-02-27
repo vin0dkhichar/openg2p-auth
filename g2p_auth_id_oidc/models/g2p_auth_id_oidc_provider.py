@@ -21,7 +21,11 @@ class G2PAuthIDOidcProvider(models.Model):
     )
     partner_creation_validate_response_mapping = fields.Char(
         help="Map Fields from Validation_url response while Partner Creation",
-        default=False,
+        default="name:name email:email phone_number:phone_number birthdate:birthdate gender:gender address:address",
+    )
+    partner_creation_date_format = fields.Char(
+        help="Format of date to be used while Partner Creation",
+        default="%Y/%m/%d",
     )
     default_group_user_creation = fields.Many2one(
         "res.groups",
@@ -31,24 +35,8 @@ class G2PAuthIDOidcProvider(models.Model):
     )
     login_attribute_mapping_on_user_creation = fields.Char(
         help="Map login attribure from validation response on User Creation",
-        default=False,
+        default="email",
     )
-
-    # g2p_id_type_key_jwt = fields.Char("G2P Registrant ID Type Key in JWT", default="sub", required=True)
-    # static_login_user = fields.Many2one("res.users", "Static User for login", required=False, default=None)
-    # enforce_static_login_user = fields.Boolean("Use Static User by default for Login", required=False, default=False)
-
-    # client_assertion_type = fields.Selection(
-    #     [
-    #         (
-    #             "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-    #             "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-    #         )
-    #     ],
-    #     required=False,
-    # )
-
-    # client_assertion = fields.Char(required=False)
 
     def _parse_id_token(self, id_token, access_token):
         # This method is only reimplemented here temporarily. To prevent atHash validation
