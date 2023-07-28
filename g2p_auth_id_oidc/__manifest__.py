@@ -7,7 +7,7 @@
     "author": "OpenG2P",
     "website": "https://github.com/OpenG2P/openg2p-auth",
     "license": "Other OSI approved licence",
-    "development_status": "Alpha",
+    "development_status": "Production/Stable",
     "depends": ["auth_oidc", "g2p_registry_base"],
     "data": [
         "views/g2p_auth_id_oidc_provider.xml",
