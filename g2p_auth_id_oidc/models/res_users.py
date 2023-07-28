@@ -237,4 +237,6 @@ class ResUsers(models.Model):
                 value = validation[key]
                 if isinstance(value, dict) or isinstance(value, list):
                     res[key] = json.dumps(value)
+                else:
+                    res[key] = value
         return res
