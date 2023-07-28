@@ -115,11 +115,12 @@ class ResUsers(models.Model):
         except AccessDenied:
             # Create partner from validation dictionary
             # TODO: Improve following mapping.
+            name = validation.pop("name", "")
             partner_dict = {
-                "given_name": validation.get("name", "").split(" ")[0],
-                "family_name": validation.get("name", "").split(" ")[-1],
-                "addl_name": " ".join(validation.get("name", "").split(" ")[1:-1]),
-                "email": validation.get(
+                "given_name": name.split(" ")[0],
+                "family_name": name.split(" ")[-1],
+                "addl_name": " ".join(name.split(" ")[1:-1]),
+                "email": validation.pop(
                     "email", "provider_%s_user_%s" % (oauth_provider.id, oauth_uid)
                 ),
                 "is_registrant": True,
@@ -130,21 +131,23 @@ class ResUsers(models.Model):
                 partner_dict["given_name"],
                 partner_dict["addl_name"],
             )
-            partner_dict["gender"] = self.process_gender(validation.get("gender", ""))
+            partner_dict["gender"] = self.process_gender(validation.pop("gender", ""))
             partner_dict["birthdate"] = self.process_birthdate(
-                validation.get("birthdate", None),
+                validation.pop("birthdate", None),
                 date_format=oauth_provider.partner_creation_date_format,
             )
             partner_dict["reg_ids"] = self.process_ids(
                 oauth_provider.g2p_id_type, oauth_uid
             )
             phone_numbers, primary_phone = self.process_phones(
-                validation.get("phone", "")
+                validation.pop("phone", "")
             )
             if primary_phone:
                 partner_dict["phone"] = primary_phone
             if phone_numbers:
                 partner_dict["phone_number_ids"] = phone_numbers
+
+            partner_dict.update(self.process_other_fields(validation))
 
             return self.env["res.partner"].create(partner_dict)
 
@@ -226,3 +229,14 @@ class ResUsers(models.Model):
                 )
             )
         return phone_numbers, phone
+
+    def process_other_fields(self, validation: dict):
+        res = {}
+        for key in validation:
+            if key in self.env["res.partner"]._fields:
+                value = validation[key]
+                if isinstance(value, dict) or isinstance(value, list):
+                    res[key] = json.dumps(value)
+                else:
+                    res[key] = value
+        return res
