@@ -147,7 +147,12 @@ class ResUsers(models.Model):
             if phone_numbers:
                 partner_dict["phone_number_ids"] = phone_numbers
 
-            partner_dict.update(self.process_other_fields(validation))
+            partner_dict.update(
+                self.process_other_fields(
+                    validation,
+                    oauth_provider.partner_creation_validate_response_mapping,
+                )
+            )
 
             return self.env["res.partner"].create(partner_dict)
 
@@ -230,11 +235,12 @@ class ResUsers(models.Model):
             )
         return phone_numbers, phone
 
-    def process_other_fields(self, validation: dict):
+    def process_other_fields(self, validation: dict, mapping: str):
         res = {}
-        for key in validation:
-            if key in self.env["res.partner"]._fields:
-                value = validation[key]
+        all_fields = [pair.split(":")[0].strip() for pair in mapping.split(" ")]
+        for key in list(validation):
+            if key in all_fields and key in self.env["res.partner"]._fields:
+                value = validation.pop(key)
                 if isinstance(value, dict) or isinstance(value, list):
                     res[key] = json.dumps(value)
                 else:
