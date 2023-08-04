@@ -1,0 +1,89 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* g2p_auth_id_oidc
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__default_group_user_creation
+msgid "Default Group User Creation"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields,help:g2p_auth_id_oidc.field_auth_oauth_provider__partner_creation_date_format
+msgid "Format of date to be used while Partner Creation"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.view_g2p_id_oidc_provider_form
+msgid "G2P Reg ID Settings"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__g2p_id_type
+msgid "G2P Registrant ID Type"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__login_attribute_mapping_on_user_creation
+msgid "Login Attribute Mapping On User Creation"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields,help:g2p_auth_id_oidc.field_auth_oauth_provider__partner_creation_validate_response_mapping
+msgid "Map Fields from Validation_url response while Partner Creation"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields,help:g2p_auth_id_oidc.field_auth_oauth_provider__login_attribute_mapping_on_user_creation
+msgid "Map login attribure from validation response on User Creation"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model,name:g2p_auth_id_oidc.model_auth_oauth_provider
+msgid "OAuth2 provider"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__partner_creation_call_validate_url
+msgid "Partner Creation Call Validate Url"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__partner_creation_date_format
+msgid "Partner Creation Date Format"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__partner_creation_validate_response_mapping
+msgid "Partner Creation Validate Response Mapping"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields,help:g2p_auth_id_oidc.field_auth_oauth_provider__default_group_user_creation
+msgid "This will be set as default group on user creation"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__g2p_oidc_id_to_use
+msgid "Use G2P Reg ID"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model,name:g2p_auth_id_oidc.model_res_users
+msgid "Users"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields,help:g2p_auth_id_oidc.field_auth_oauth_provider__partner_creation_call_validate_url
+msgid "Whether to call Validation Url for data during Partner Creation"
+msgstr ""
