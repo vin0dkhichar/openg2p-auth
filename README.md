@@ -9,7 +9,7 @@
 
 # OpenG2P Auth
 
-This repo contains openg2p auth related modules.
+This repo contains openg2p auth related modules. Refer to [OpenG2P Docs](https://docs.openg2p.org/v/1.1).
 
 <!-- /!\ do not modify below this line -->
 
