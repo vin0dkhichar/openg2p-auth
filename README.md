@@ -1,7 +1,7 @@
 
 <!-- /!\ Non OCA Context : Set here the badge of your runbot / runboat instance. -->
-[![Pre-commit Status](https://github.com/OpenG2P/openg2p-auth/actions/workflows/pre-commit.yml/badge.svg?branch=15.0-1.1.0)](https://github.com/OpenG2P/openg2p-auth/actions/workflows/pre-commit.yml?query=branch%3A15.0-1.1.0)
-[![Build Status](https://github.com/OpenG2P/openg2p-auth/actions/workflows/test.yml/badge.svg?branch=15.0-1.1.0)](https://github.com/OpenG2P/openg2p-auth/actions/workflows/test.yml?query=branch%3A15.0-1.1.0)
+[![Pre-commit Status](https://github.com/OpenG2P/openg2p-auth/actions/workflows/pre-commit.yml/badge.svg?branch=15.0-develop)](https://github.com/OpenG2P/openg2p-auth/actions/workflows/pre-commit.yml?query=branch%3A15.0-develop)
+[![Build Status](https://github.com/OpenG2P/openg2p-auth/actions/workflows/test.yml/badge.svg?branch=15.0-develop)](https://github.com/OpenG2P/openg2p-auth/actions/workflows/test.yml?query=branch%3A15.0-develop)
 <!-- /!\ Non OCA Context : Set here the badge of your translation instance. -->
 
 <!-- /!\ do not modify above this line -->
@@ -20,7 +20,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[g2p_auth_id_oidc](g2p_auth_id_oidc/) | 15.0.1.1.0 |  | G2P Auth: OIDC - Reg ID
+[g2p_auth_id_oidc](g2p_auth_id_oidc/) | 15.0.1.2.0 |  | G2P Auth: OIDC - Reg ID
 
 [//]: # (end addons)
 
