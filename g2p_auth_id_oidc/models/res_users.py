@@ -1,6 +1,8 @@
+import base64
 import json
 import logging
 from datetime import datetime
+from urllib.request import urlopen
 
 import requests
 import werkzeug.http
@@ -147,6 +149,10 @@ class ResUsers(models.Model):
             if phone_numbers:
                 partner_dict["phone_number_ids"] = phone_numbers
 
+            partner_dict["image_1920"] = self.process_picture(
+                validation.pop("picture", None)
+            )
+
             partner_dict.update(
                 self.process_other_fields(
                     validation,
@@ -234,6 +240,13 @@ class ResUsers(models.Model):
                 )
             )
         return phone_numbers, phone
+
+    def process_picture(self, picture):
+        image_parsed = None
+        if picture:
+            with urlopen(picture) as response:
+                image_parsed = base64.b64encode(response.read())
+        return image_parsed
 
     def process_other_fields(self, validation: dict, mapping: str):
         res = {}
