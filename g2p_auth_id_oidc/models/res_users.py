@@ -1,8 +1,8 @@
 import base64
-from urllib.request import urlopen
 import json
 import logging
 from datetime import datetime
+from urllib.request import urlopen
 
 import requests
 import werkzeug.http
@@ -149,7 +149,9 @@ class ResUsers(models.Model):
             if phone_numbers:
                 partner_dict["phone_number_ids"] = phone_numbers
 
-            partner_dict["image_1920"] = self.process_picture(validation.pop("picture", None))
+            partner_dict["image_1920"] = self.process_picture(
+                validation.pop("picture", None)
+            )
 
             partner_dict.update(
                 self.process_other_fields(
