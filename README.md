@@ -21,6 +21,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [g2p_auth_id_oidc](g2p_auth_id_oidc/) | 15.0.1.2.0 |  | G2P Auth: OIDC - Reg ID
+[g2p_portal_auth](g2p_portal_auth/) | 15.0.1.2.0 |  | G2P Portal Auth
 
 [//]: # (end addons)
 

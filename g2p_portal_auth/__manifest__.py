@@ -1,6 +1,6 @@
 # Part of OpenG2P Registry. See LICENSE file for full copyright and licensing details.
 {
-    "name": "G2P Auth: OIDC - Reg ID",
+    "name": "G2P Portal Auth",
     "category": "G2P",
     "version": "15.0.1.2.0",
     "sequence": 1,
@@ -8,9 +8,9 @@
     "website": "https://openg2p.org",
     "license": "Other OSI approved licence",
     "development_status": "Alpha",
-    "depends": ["auth_oidc", "g2p_registry_base"],
+    "depends": ["auth_oidc"],
     "data": [
-        "views/g2p_auth_id_oidc_provider.xml",
+        "views/auth_oauth_provider.xml",
     ],
     "assets": {
         "web.assets_backend": [],
