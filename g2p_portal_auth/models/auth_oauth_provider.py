@@ -10,3 +10,5 @@ class G2PSelfServiceOauthProvider(models.Model):
     g2p_service_provider_allowed = fields.Boolean(
         "Allowed in Service Provider Portal", default=False
     )
+    g2p_portal_login_image_icon_url = fields.Text()
+    g2p_portal_oauth_callback_url = fields.Char()
