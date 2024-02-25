@@ -1,33 +1,38 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel  # pylint: disable=[W7936]
 
 
 class CredetialRequestProof(BaseModel):
     proof_type: str
-    jwt: str
-    cwt: str
+    jwt: Optional[str] = None
+    cwt: Optional[str] = None
+
+
+class CredentialRequestDefintion(BaseModel, extra="allow"):
+    type: List[str]
 
 
 class CredentialRequest(BaseModel):
     format: str
     proof: CredetialRequestProof
-    credential_definition: dict
+    credential_definition: CredentialRequestDefintion
 
 
-class CredentialResponse(BaseModel):
+class CredentialBaseResponse(BaseModel, extra="allow"):
+    c_nonce: Optional[str] = None
+    c_nonce_expires_in: Optional[int] = None
+
+
+class CredentialResponse(CredentialBaseResponse):
     format: str
     credential: dict
-    acceptance_token: str
-    c_nonce: str
-    c_nonce_expires_in: int
+    acceptance_token: Optional[str] = None
 
 
-class CredentialErrorResponse(BaseModel):
+class CredentialErrorResponse(CredentialBaseResponse):
     error: str
     error_description: str
-    c_nonce: str
-    c_nonce_expires_in: int
 
 
 class CredentialIssuerDisplayLogoResponse(BaseModel):
@@ -57,7 +62,3 @@ class CredentialIssuerResponse(BaseModel):
     credential_issuer: str
     credential_endpoint: str
     credential_configurations_supported: Dict[str, CredentialIssuerConfigResponse]
-
-
-class ContextsJson(BaseModel, extra="allow"):
-    pass

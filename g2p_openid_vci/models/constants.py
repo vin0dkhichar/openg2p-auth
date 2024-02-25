@@ -54,60 +54,55 @@ DEFAULT_ISSUER_METADATA_TEXT = """{{
     }}
 }}"""
 
-DEFAULT_CREDENTIAL_SUBJECT_FORMAT = """{{
+DEFAULT_CREDENTIAL_SUBJECT_FORMAT = """{
     "vcVer": "VC-V1",
-    "id": f"{web_base_url}/api/v1/registry/individual/{partner.id}",
+    "id": (.web_base_url  + "/api/v1/registry/individual/" + (.partner.id | tostring)),
     "name": [
-        {{
+        {
             "language": "eng",
-            "value": {partner.name},
-        }}
+            "value": .partner.name
+        }
     ],
     "fullName": [
-        {{
+        {
             "language": "eng",
-            "value": {partner.name},
-        }}
+            "value": .partner.name
+        }
     ],
     "gender": [
-        {{
+        {
             "language": "eng",
-            "value": {partner.gender},
-        }}
+            "value": .partner.gender
+        }
     ],
-    "dateOfBirth": [
-        {{
-            "language": "eng",
-            "value": {partner.birth_date},
-        }}
-    ],
-    "email": {partner.email},
-    "phone": {partner.phone},
+    "dateOfBirth": .partner.birthdate,
+    "email": .partner.email,
+    "phone": .partner.phone,
     "addressLine1": [
-        {{
+        {
             "language": "eng",
-            "value": {partner_address.get('street_address')},
-        }}
+            "value": .partner_address.street_address
+        }
     ],
     "province": [
-        {{
+        {
             "language": "eng",
-            "value": {partner_address.get('locality')},
-        }}
+            "value": .partner_address.locality
+        }
     ],
     "region": [
-        {{
+        {
             "language": "eng",
-            "value": {partner_address.get('region')},
-        }}
+            "value": .partner_address.region
+        }
     ],
-    "postalCode": {partner_address.get('postal_code')},
-    "face": {partner_face},
-    "UIN": {reg_id.value},
-}}"""
+    "postalCode": .partner_address.postal_code,
+    "face": .partner_face,
+    "UIN": .reg_id.value
+}"""
 
 DEFAULT_CONTEXT_TO_INCLUDE = """[
     "https://www.w3.org/2018/credentials/v1",
     "https://schema.org/",
-    "{web_base_url}/api/v1/vci/contexts.json"
+    "{web_base_url}/g2p_openid_vci/static/contexts.json"
 ]"""

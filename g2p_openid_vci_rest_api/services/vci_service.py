@@ -1,14 +1,12 @@
 import json
 import logging
 
-from odoo import modules
-
 from odoo.addons.base_rest import restapi
 from odoo.addons.base_rest_pydantic.restapi import PydanticModel
 from odoo.addons.component.core import Component
 
 from ..models.openid_vci import (
-    ContextsJson,
+    CredentialBaseResponse,
     CredentialErrorResponse,
     CredentialIssuerResponse,
     CredentialRequest,
@@ -18,7 +16,7 @@ from ..models.openid_vci import (
 _logger = logging.getLogger(__name__)
 
 
-class WellknownRestService(Component):
+class OpenIdVCIRestService(Component):
     _name = "openid_vci_base.rest.service"
     _inherit = ["base.rest.service"]
     _usage = "vci"
@@ -37,15 +35,13 @@ class WellknownRestService(Component):
             )
         ],
         input_param=PydanticModel(CredentialRequest),
-        output_param=PydanticModel(CredentialResponse),
+        output_param=PydanticModel(CredentialBaseResponse),
     )
     def post_credential(self, credential_request: CredentialRequest):
         try:
             # TODO: Split into smaller steps to better handle errors
             return CredentialResponse(
-                **self.env["g2p.openid.vci.issuers"].issue_credential(
-                    credential_request.model_dump()
-                )
+                **self.env["g2p.openid.vci.issuers"].issue_vc(credential_request.dict())
             )
         except Exception as e:
             _logger.exception("Error while handling credential request")
@@ -83,27 +79,3 @@ class WellknownRestService(Component):
                 json.loads(issuer_metadata_string)
             )
         return CredentialIssuerResponse(**response)
-
-    @restapi.method(
-        [
-            (
-                [
-                    "/context.json",
-                ],
-                "GET",
-            )
-        ],
-        output_param=PydanticModel(ContextsJson),
-    )
-    def get_context_json(self):
-        web_base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
-        with open(
-            modules.module.get_resource_path(
-                "g2p_openid_vci",
-                "static",
-                "context.json",
-            )
-        ) as context_file:
-            return ContextsJson(
-                json.loads(context_file.read().format(web_base_url=web_base_url))
-            )
