@@ -5,7 +5,9 @@ from datetime import datetime
 
 import pyjq as jq  # pylint: disable=[W7936]
 import requests
+from cryptography.hazmat.primitives import hashes
 from jose import jwt  # pylint: disable=[W7936]
+from pyld import jsonld  # pylint: disable=[W7936]
 
 from odoo import api, fields, models, tools
 
@@ -37,8 +39,11 @@ class OpenIDVCIssuer(models.Model):
     supported_format = fields.Selection(
         [("ldp_vc", "ldp_vc")], default="ldp_vc", required=True
     )
+    unique_issuer_id = fields.Char(default="did:example:12345678abcdefgh")
 
     contexts_to_include = fields.Text(default=DEFAULT_CONTEXT_TO_INCLUDE)
+
+    encryption_provider_id = fields.Many2one("g2p.encryption.provider")
 
     auth_sub_id_type_id = fields.Many2one("g2p.id.type")
 
@@ -56,18 +61,7 @@ class OpenIDVCIssuer(models.Model):
         request_proof_jwt = credential_request["proof"]["jwt"]
         request_proof = None
         if request_proof_type and request_proof_jwt and request_proof_type == "jwt":
-            request_proof = jwt.decode(
-                request_proof_jwt,
-                None,
-                options={
-                    "verify_signature": False,
-                    "verify_exp": False,
-                    "verify_nbf": False,
-                    "verify_iss": False,
-                    "verify_aud": False,
-                    "verify_at_hash": False,
-                },
-            )
+            request_proof = jwt.get_unverified_claims(request_proof_jwt)
         else:
             raise ValueError("Only JWT proof supported")
 
@@ -158,7 +152,7 @@ class OpenIDVCIssuer(models.Model):
             ),
             "id": f"urn:uuid:{uuid.uuid4()}",
             "type": self.type,
-            "issuer": "",
+            "issuer": self.unique_issuer_id,
             "issuanceDate": curr_datetime,
             "credentialSubject": jq.first(
                 self.credential_subject_format,
@@ -179,10 +173,43 @@ class OpenIDVCIssuer(models.Model):
             ),
         }
         credential_response = {
-            "credential": credential,
+            "credential": self.sign_and_issue_credential(credential),
             "format": credential_request["format"],
         }
         return credential_response
+
+    def sign_and_issue_credential(self, credential: dict) -> dict:
+        self.ensure_one()
+
+        ld_proof = self.build_empty_ld_proof()
+        normalised_ld_prood_str = jsonld.normalize(
+            ld_proof, {"algorithm": "URDNA2015", "format": "application/n-quads"}
+        )
+        normalized_json_ld_str = jsonld.normalize(
+            credential, {"algorithm": "URDNA2015", "format": "application/n-quads"}
+        )
+
+        signature = self.get_encryption_provider().jwt_sign(
+            self.sha256_digest(normalised_ld_prood_str.encode())
+            + self.sha256_digest(normalized_json_ld_str.encode()),
+            include_payload=False,
+            include_certificate=True,
+            include_cert_hash=True,
+        )
+        ld_proof["jws"] = signature
+        ret = dict(credential)
+        ret["proof"] = ld_proof
+        return ret
+
+    def build_empty_ld_proof(self):
+        self.ensure_one()
+        return {
+            "@context": [
+                "https://w3id.org/security/v2",
+            ],
+            "type": "RsaSignature2018",
+            "proofPurpose": "assertionMethod",
+        }
 
     def get_auth_jwks(
         self,
@@ -198,6 +225,13 @@ class OpenIDVCIssuer(models.Model):
             jwk_url = f'{auth_issuer.rstrip("/")}/.well-known/jwks.json'
         return requests.get(jwk_url).json()
 
+    def get_encryption_provider(self):
+        self.ensure_one()
+        prov = self.encryption_provider_id
+        if not prov:
+            prov = self.env.ref("g2p_encryption.encryption_provider_default")
+        return prov
+
     @api.model
     def get_full_address(self, address: str) -> dict:
         try:
@@ -211,3 +245,9 @@ class OpenIDVCIssuer(models.Model):
             return None
         image = tools.base64_to_image(image_base64)
         return f"data:image/{image.format.lower()};base64,{image_base64}"
+
+    @api.model
+    def sha256_digest(self, data: bytes) -> bytes:
+        sha = hashes.Hash(hashes.SHA256())
+        sha.update(data)
+        return sha.finalize()

@@ -102,7 +102,5 @@ DEFAULT_CREDENTIAL_SUBJECT_FORMAT = """{
 }"""
 
 DEFAULT_CONTEXT_TO_INCLUDE = """[
-    "https://www.w3.org/2018/credentials/v1",
-    "https://schema.org/",
     "{web_base_url}/g2p_openid_vci/static/contexts.json"
 ]"""

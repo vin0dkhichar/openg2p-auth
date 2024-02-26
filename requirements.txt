@@ -2,4 +2,5 @@
 cryptography
 extendable-pydantic
 pydantic==1.10.10
+PyLD
 python-jose

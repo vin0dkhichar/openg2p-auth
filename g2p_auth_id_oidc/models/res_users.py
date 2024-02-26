@@ -181,11 +181,9 @@ class ResUsers(models.Model):
 
         if response.ok:  # nb: could be a successful failure
             if response.headers.get("content-type"):
-                # TODO: Improve the following
                 if "application/jwt" in response.headers["content-type"]:
-                    return jwt.decode(
-                        response.text, None, options={"verify_signature": False}
-                    )
+                    # TODO: Improve the following
+                    return jwt.get_unverified_claims(response.text)
                 if "application/json" in response.headers["content-type"]:
                     return response.json()
         auth_challenge = werkzeug.http.parse_www_authenticate_header(

@@ -1,73 +1,91 @@
 {
-  "@context": [
-    {
-      "@version": 1.1
-    },
-    "https://www.w3.org/ns/odrl.jsonld",
-    {
-      "schema": "http://schema.org/",
-      "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-      "name": {
-        "@id": "https://openg2p.org/context/name",
-        "@context": {
-          "value": "rdf:value",
-          "lang": "@language"
+  "@context": {
+    "OpenG2PRegistryVerifiableCredential": {
+      "@id": "https://openg2p.org/credential#OpenG2PRegistryVerifiableCredential",
+      "@context": [
+        "https://www.w3.org/2018/credentials/v1",
+        {
+          "@vocab": "https://openg2p.org/credential#OpenG2PRegistryVerifiableCredential#",
+          "credentialSubject": {
+            "@id": "credentialSubject",
+            "@type": "@id",
+            "@context": {
+              "@vocab": "https://openg2p.org/credential#OpenG2PRegistryVerifiableCredential#credentialSubject#",
+              "name": {
+                "@id": "name",
+                "@type": "@id",
+                "@context": {
+                  "value": "@value",
+                  "language": "@language"
+                }
+              },
+              "fullName": {
+                "@id": "fullName",
+                "@type": "@id",
+                "@context": {
+                  "value": "@value",
+                  "language": "@language"
+                }
+              },
+              "gender": {
+                "@id": "gender",
+                "@type": "@id",
+                "@context": {
+                  "value": "@value",
+                  "language": "@language"
+                }
+              },
+              "dateOfBirth": "dateOfBirth",
+              "email": "email",
+              "phone": "phone",
+              "addressLine1": {
+                "@id": "addressLine1",
+                "@type": "@id",
+                "@context": {
+                  "value": "@value",
+                  "language": "@language"
+                }
+              },
+              "addressLine2": {
+                "@id": "addressLine2",
+                "@type": "@id",
+                "@context": {
+                  "value": "@value",
+                  "language": "@language"
+                }
+              },
+              "addressLine3": {
+                "@id": "addressLine3",
+                "@type": "@id",
+                "@context": {
+                  "value": "@value",
+                  "language": "@language"
+                }
+              },
+              "province": {
+                "@id": "province",
+                "@type": "@id",
+                "@context": {
+                  "value": "@value",
+                  "language": "@language"
+                }
+              },
+              "region": {
+                "@id": "region",
+                "@type": "@id",
+                "@context": {
+                  "value": "@value",
+                  "language": "@language"
+                }
+              },
+              "postalCode": "postalCode",
+              "face": "face",
+              "vcVer": "vcVer",
+              "UIN": "UIN"
+            }
+          }
         }
-      },
-      "fullName": {
-        "@id": "https://openg2p.org/context/fullName",
-        "@context": {
-          "value": "rdf:value",
-          "lang": "@language"
-        }
-      },
-      "gender": {
-        "@id": "https://openg2p.org/context/gender",
-        "@context": {
-          "value": "rdf:value",
-          "lang": "@language"
-        }
-      },
-      "dateOfBirth": "https://openg2p.org/context/dateOfBirth",
-      "email": "https://openg2p.org/context/fullName",
-      "phone": "https://openg2p.org/context/phone",
-      "addressLine1": {
-        "@id": "https://openg2p.org/context/addressLine1",
-        "@context": {
-          "value": "rdf:value",
-          "language": "@language"
-        }
-      },
-      "addressLine2": {
-        "@id": "https://openg2p.org/context/addressLine2",
-        "@context": {
-          "value": "rdf:value",
-          "language": "@language"
-        }
-      },
-      "addressLine3": {
-        "@id": "https://openg2p.org/context/addressLine3",
-        "@context": {
-          "value": "rdf:value",
-          "language": "@language"
-        }
-      },
-      "province": {
-        "@id": "https://openg2p.org/context/province",
-        "@context": {
-          "value": "rdf:value",
-          "language": "@language"
-        }
-      },
-      "region": {
-        "@id": "https://openg2p.org/openg2p/region",
-        "@context": {
-          "value": "rdf:value",
-          "language": "@language"
-        }
-      },
-      "postalCode": "https://openg2p.org/context/postalCode",
-      "face": "https://openg2p.org/context/face"
+      ]
     }
-  ]
+  }
 }

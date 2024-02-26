@@ -27,8 +27,11 @@ Part of OpenG2P. See LICENSE file for full copyright and licensing details.
                     <field name="scope" />
                     <field name="type" />
                     <field name="supported_format" />
+                    <field name="unique_issuer_id" />
 
                     <field name="contexts_to_include" />
+
+                    <field name="encryption_provider_id" groups="g2p_encryption.crypto_admin" />
 
                     <field name="auth_sub_id_type_id" />
                     <field name="auth_allowed_auds" />
