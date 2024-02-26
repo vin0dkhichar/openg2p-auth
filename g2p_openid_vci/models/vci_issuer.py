@@ -117,12 +117,16 @@ class OpenIDVCIssuer(models.Model):
         except Exception as e:
             raise ValueError("Invalid proof received") from e
 
-        return credential_issuer.issue_vc_based_on_issuer(
+        issue_vc_func = getattr(credential_issuer, f"issue_vc_{credential_issuer.type}")
+
+        return issue_vc_func(
             proof_payload=request_proof,
             credential_request=credential_request,
         )
 
-    def issue_vc_based_on_issuer(self, proof_payload, credential_request):
+    def issue_vc_OpenG2PRegistryVerifiableCredential(
+        self, proof_payload, credential_request
+    ):
         self.ensure_one()
         web_base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         reg_id = (
@@ -147,8 +151,8 @@ class OpenIDVCIssuer(models.Model):
 
         curr_datetime = f'{datetime.utcnow().isoformat(timespec = "milliseconds")}Z'
         credential = {
-            "@context": json.loads(
-                self.contexts_to_include.format(web_base_url=web_base_url)
+            "@context": jq.first(
+                self.contexts_to_include, {"web_base_url": web_base_url}
             ),
             "id": f"urn:uuid:{uuid.uuid4()}",
             "type": self.type,
@@ -156,19 +160,16 @@ class OpenIDVCIssuer(models.Model):
             "issuanceDate": curr_datetime,
             "credentialSubject": jq.first(
                 self.credential_subject_format,
-                json.loads(
-                    json.dumps(
-                        {
-                            "web_base_url": web_base_url,
-                            "partner": partner_dict,
-                            "partner_address": self.get_full_address(partner.address),
-                            "partner_face": self.get_image_base64_data_in_url(
-                                partner.image_1920
-                            ),
-                            "reg_id": reg_id_dict,
-                        },
-                        cls=RegistryJSONEncoder,
-                    )
+                RegistryJSONEncoder.python_dict_to_json_dict(
+                    {
+                        "web_base_url": web_base_url,
+                        "partner": partner_dict,
+                        "partner_address": self.get_full_address(partner.address),
+                        "partner_face": self.get_image_base64_data_in_url(
+                            partner.image_1920
+                        ),
+                        "reg_id": reg_id_dict,
+                    },
                 ),
             ),
         }

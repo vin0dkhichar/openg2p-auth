@@ -1,58 +1,58 @@
-DEFAULT_ISSUER_METADATA_TEXT = """{{
-    "{type}": {{
-        "format": "{supported_format}",
-        "scope": "{scope}",
+DEFAULT_ISSUER_METADATA_TEXT = """{
+    (.type): {
+        "format": .supported_format,
+        "scope": .scope,
         "cryptographic_binding_methods_supported": [
             "did:jwk"
         ],
         "credential_signing_alg_values_supported": [
             "RS256"
         ],
-        "credential_definition": {{
+        "credential_definition": {
             "type": [
                 "VerifiableCredential",
-                "{type}"
+                .type
             ],
-            "credentialSubject": {{
-                "given_name": {{
+            "credentialSubject": {
+                "given_name": {
                     "display": [
-                        {{
+                        {
                             "name": "Given Name",
                             "locale": "en-US"
-                        }}
+                        }
                     ]
-                }},
-                "family_name": {{
+                },
+                "family_name": {
                     "display": [
-                        {{
+                        {
                             "name": "Surname",
                             "locale": "en-US"
-                        }}
+                        }
                     ]
-                }}
-            }}
-        }},
-        "proof_types_supported": {{
-            "jwt": {{
+                }
+            }
+        },
+        "proof_types_supported": {
+            "jwt": {
                 "proof_signing_alg_values_supported": [
                     "RS256"
                 ]
-            }}
-        }},
+            }
+        },
         "display": [
-            {{
+            {
                 "name": "OpenG2P Credential",
                 "locale": "en-US",
-                "logo": {{
-                    "url": "{web_base_url}/g2p_openid_vci/static/description/icon.png",
+                "logo": {
+                    "url": (.web_base_url + "/g2p_openid_vci/static/description/icon.png"),
                     "alt_text": "a square logo of a OpenG2P"
-                }},
+                },
                 "background_color": "#12107c",
                 "text_color": "#FFFFFF"
-            }}
+            }
         ]
-    }}
-}}"""
+    }
+}"""
 
 DEFAULT_CREDENTIAL_SUBJECT_FORMAT = """{
     "vcVer": "VC-V1",
@@ -102,5 +102,6 @@ DEFAULT_CREDENTIAL_SUBJECT_FORMAT = """{
 }"""
 
 DEFAULT_CONTEXT_TO_INCLUDE = """[
-    "{web_base_url}/g2p_openid_vci/static/contexts.json"
+    "https://www.w3.org/2018/credentials/v1",
+    (.web_base_url + "/g2p_openid_vci/static/contexts.json")
 ]"""

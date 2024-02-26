@@ -12,3 +12,7 @@ class RegistryJSONEncoder(json.JSONEncoder):
         if isinstance(obj, date):
             return obj.isoformat()
         return json.JSONEncoder.default(self, obj)
+
+    @classmethod
+    def python_dict_to_json_dict(cls, data: dict) -> dict:
+        return json.loads(json.dumps(data, cls=cls))

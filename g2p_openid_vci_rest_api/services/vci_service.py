@@ -1,9 +1,11 @@
-import json
 import logging
+
+import pyjq as jq
 
 from odoo.addons.base_rest import restapi
 from odoo.addons.base_rest_pydantic.restapi import PydanticModel
 from odoo.addons.component.core import Component
+from odoo.addons.g2p_openid_vci.json_encoder import RegistryJSONEncoder
 
 from ..models.openid_vci import (
     CredentialBaseResponse,
@@ -73,9 +75,8 @@ class OpenIdVCIRestService(Component):
             "credential_configurations_supported": {},
         }
         for issuer in vci_issuers:
-            issuer.update({"web_base_url": web_base_url})
-            issuer_metadata_string = issuer["issuer_metadata_text"].format(**issuer)
-            response["credential_configurations_supported"].update(
-                json.loads(issuer_metadata_string)
-            )
+            issuer["web_base_url"] = web_base_url
+            issuer = RegistryJSONEncoder.python_dict_to_json_dict(issuer)
+            issuer_metadata = jq.first(issuer["issuer_metadata_text"], issuer)
+            response["credential_configurations_supported"].update(issuer_metadata)
         return CredentialIssuerResponse(**response)
