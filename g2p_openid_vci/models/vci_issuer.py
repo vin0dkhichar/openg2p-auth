@@ -71,13 +71,13 @@ class OpenIDVCIssuer(models.Model):
         if not request_scopes:
             raise ValueError("Scope not found in proof.")
 
-        credential_issuer = self.sudo().search(
-            [
-                ("supported_format", "=", request_format),
-                ("scope", "in", request_scopes),
-                ("type", "in", request_types),
-            ],
-        )
+        search_domain = [
+            ("supported_format", "=", request_format),
+            ("scope", "in", request_scopes),
+        ]
+        if request_types:
+            search_domain.append(("type", "in", request_types))
+        credential_issuer = self.sudo().search(search_domain)
         if credential_issuer and len(credential_issuer):
             credential_issuer = credential_issuer[0]
         else:
@@ -128,7 +128,9 @@ class OpenIDVCIssuer(models.Model):
         self, proof_payload, credential_request
     ):
         self.ensure_one()
-        web_base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        web_base_url = (
+            self.env["ir.config_parameter"].sudo().get_param("web.base.url").rstrip("/")
+        )
         reg_id = (
             self.env["g2p.reg.id"]
             .sudo()

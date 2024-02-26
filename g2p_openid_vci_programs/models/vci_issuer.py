@@ -43,7 +43,7 @@ class BeneficiaryOpenIDVCIssuer(models.Model):
                     (
                         "partner_id.program_membership_ids.program_id",
                         "=",
-                        self.program_id,
+                        self.program_id.id,
                     ),
                 ],
                 limit=1,

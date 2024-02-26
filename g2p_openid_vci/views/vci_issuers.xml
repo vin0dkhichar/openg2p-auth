@@ -29,8 +29,6 @@ Part of OpenG2P. See LICENSE file for full copyright and licensing details.
                     <field name="supported_format" />
                     <field name="unique_issuer_id" />
 
-                    <field name="contexts_to_include" />
-
                     <field name="encryption_provider_id" groups="g2p_encryption.crypto_admin" />
 
                     <field name="auth_sub_id_type_id" />
@@ -39,8 +37,8 @@ Part of OpenG2P. See LICENSE file for full copyright and licensing details.
                     <field name="auth_issuer_jwks_mapping" />
                     <field name="auth_allowed_client_ids" />
 
+                    <field name="contexts_to_include" />
                     <field name="credential_subject_format" />
-
                     <field name="issuer_metadata_text" />
                 </group>
             </form>

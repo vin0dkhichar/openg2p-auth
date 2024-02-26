@@ -12,7 +12,8 @@ Part of OpenG2P. See LICENSE file for full copyright and licensing details.
             <field name="unique_issuer_id" position="after">
                 <field
                     name="program_id"
-                    attrs="{'invisible': [('type','!=','OpenG2PBeneficiaryVerifiableCredential')]}"
+                    attrs="{'invisible': [('type','!=','OpenG2PBeneficiaryVerifiableCredential')],
+                            'required': [('type','=','OpenG2PBeneficiaryVerifiableCredential')]}"
                 />
             </field>
         </field>
