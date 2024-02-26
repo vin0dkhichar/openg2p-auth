@@ -15,7 +15,9 @@
         "base_rest_pydantic",
         "extendable",
     ],
-    "external_dependencies": {"python": ["extendable-pydantic", "pydantic==1.10.10"]},
+    "external_dependencies": {
+        "python": ["extendable-pydantic", "pydantic==1.10.10", "pyjq"]
+    },
     "data": [],
     "assets": {
         "web.assets_backend": [],

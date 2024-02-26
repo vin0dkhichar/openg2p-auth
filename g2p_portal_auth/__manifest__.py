@@ -1,4 +1,4 @@
-# Part of OpenG2P Registry. See LICENSE file for full copyright and licensing details.
+# Part of OpenG2P. See LICENSE file for full copyright and licensing details.
 {
     "name": "G2P Portal Auth",
     "category": "G2P",

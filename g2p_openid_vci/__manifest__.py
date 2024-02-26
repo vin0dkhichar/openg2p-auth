@@ -1,4 +1,4 @@
-# Part of OpenG2P Registry. See LICENSE file for full copyright and licensing details.
+# Part of OpenG2P. See LICENSE file for full copyright and licensing details.
 {
     "name": "G2P OpenID VCI: Base",
     "category": "G2P",
@@ -12,7 +12,9 @@
         "g2p_registry_base",
         "g2p_encryption",
     ],
-    "external_dependencies": {"python": ["cryptography", "python-jose", "PyLD"]},
+    "external_dependencies": {
+        "python": ["cryptography", "python-jose", "pyjq", "PyLD"]
+    },
     "data": [
         "security/ir.model.access.csv",
         "views/vci_issuers.xml",

@@ -1,4 +1,3 @@
-import json
 import logging
 import uuid
 from datetime import datetime
@@ -56,6 +55,11 @@ class BeneficiaryOpenIDVCIssuer(models.Model):
             )
 
         partner = reg_id.partner_id
+        program_membership_id = partner.program_membership_ids.filtered(
+            lambda x: x.program_id.id == self.program_id.id
+        )
+        if program_membership_id.state != "enrolled":
+            raise ValueError("Person not enrolled into program.")
 
         partner_dict = reg_id.partner_id.read()[0]
         reg_id_dict = reg_id.read(["value", "id_type"])[0]
@@ -72,20 +76,17 @@ class BeneficiaryOpenIDVCIssuer(models.Model):
             "issuanceDate": curr_datetime,
             "credentialSubject": jq.first(
                 self.credential_subject_format,
-                json.loads(
-                    json.dumps(
-                        {
-                            "web_base_url": web_base_url,
-                            "partner": partner_dict,
-                            "partner_address": self.get_full_address(partner.address),
-                            "partner_face": self.get_image_base64_data_in_url(
-                                partner.image_1920
-                            ),
-                            "reg_id": reg_id_dict,
-                            "program": program_dict,
-                        },
-                        cls=RegistryJSONEncoder,
-                    )
+                RegistryJSONEncoder.python_dict_to_json_dict(
+                    {
+                        "web_base_url": web_base_url,
+                        "partner": partner_dict,
+                        "partner_address": self.get_full_address(partner.address),
+                        "partner_face": self.get_image_base64_data_in_url(
+                            partner.image_1920
+                        ),
+                        "reg_id": reg_id_dict,
+                        "program": program_dict,
+                    }
                 ),
             ),
         }
