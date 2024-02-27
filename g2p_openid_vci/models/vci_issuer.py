@@ -1,13 +1,15 @@
+# pylint: disable=[W7936]
+
 import json
 import logging
 import uuid
 from datetime import datetime
 
-import pyjq as jq  # pylint: disable=[W7936]
+import pyjq as jq
 import requests
 from cryptography.hazmat.primitives import hashes
-from jose import jwt  # pylint: disable=[W7936]
-from pyld import jsonld  # pylint: disable=[W7936]
+from jose import jwt
+from pyld import jsonld
 
 from odoo import api, fields, models, tools
 

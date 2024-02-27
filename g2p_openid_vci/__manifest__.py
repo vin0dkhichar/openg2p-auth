@@ -13,7 +13,7 @@
         "g2p_encryption",
     ],
     "external_dependencies": {
-        "python": ["cryptography", "python-jose", "pyjq", "PyLD"]
+        "python": ["cryptography<37", "python-jose", "pyjq", "PyLD"]
     },
     "data": [
         "security/ir.model.access.csv",
