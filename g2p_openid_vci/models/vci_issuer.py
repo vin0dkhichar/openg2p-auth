@@ -52,24 +52,20 @@ class OpenIDVCIssuer(models.Model):
     contexts_json = fields.Text()
 
     @api.model
-    def issue_vc(self, credential_request: dict):
-        request_proof_type = credential_request["proof"]["proof_type"]
-        request_proof_jwt = credential_request["proof"]["jwt"]
-        request_proof = None
-        if request_proof_type and request_proof_jwt and request_proof_type == "jwt":
-            request_proof = jwt.get_unverified_claims(request_proof_jwt)
-        else:
-            raise ValueError("Only JWT proof supported")
+    def issue_vc(self, credential_request: dict, token: str):
+        # TODO: Raise better errors and error types
+        auth_claims_unverified = jwt.get_unverified_claims(token)
+        auth_scopes = auth_claims_unverified.get("scope", "").split()
 
         request_format = credential_request["format"]
         request_types = credential_request["credential_definition"]["type"]
-        request_scopes = request_proof.get("scope", "").split()
-        if not request_scopes:
-            raise ValueError("Scope not found in proof.")
+
+        if not auth_scopes:
+            raise ValueError("Scope not found in auth token.")
 
         search_domain = [
             ("supported_format", "=", request_format),
-            ("scope", "in", request_scopes),
+            ("scope", "in", auth_scopes),
         ]
         if request_types:
             search_domain.append(("type", "in", request_types))
@@ -79,7 +75,7 @@ class OpenIDVCIssuer(models.Model):
         else:
             raise ValueError("Invalid combination of scope, type, format")
 
-        request_auth_iss = request_proof["iss"]
+        request_auth_iss = auth_claims_unverified["iss"]
         # TODO: Client id validation
 
         try:
@@ -88,40 +84,43 @@ class OpenIDVCIssuer(models.Model):
             auth_jwks_mapping = (
                 credential_issuer.auth_issuer_jwks_mapping or ""
             ).split()
+            # TODO: Cache JWKS somehow
             jwks = credential_issuer.get_auth_jwks(
                 request_auth_iss,
                 auth_allowed_iss,
                 auth_jwks_mapping,
             )
             jwt.decode(
-                request_proof_jwt,
+                token,
                 jwks,
                 issuer=auth_allowed_iss,
                 options={"verify_aud": False},
             )
             if auth_allowed_aud and (
                 (
-                    isinstance(request_proof["aud"], list)
-                    and set(auth_allowed_aud).issubset(set(request_proof["aud"]))
+                    isinstance(auth_claims_unverified["aud"], list)
+                    and set(auth_allowed_aud).issubset(
+                        set(auth_claims_unverified["aud"])
+                    )
                 )
                 or (
-                    isinstance(request_proof["aud"], str)
-                    and auth_allowed_aud in request_proof["aud"]
+                    isinstance(auth_claims_unverified["aud"], str)
+                    and auth_allowed_aud in auth_claims_unverified["aud"]
                 )
             ):
                 raise ValueError("Invalid Audience")
         except Exception as e:
-            raise ValueError("Invalid proof received") from e
+            raise ValueError("Invalid Auth Token received") from e
 
         issue_vc_func = getattr(credential_issuer, f"issue_vc_{credential_issuer.type}")
 
         return issue_vc_func(
-            proof_payload=request_proof,
+            auth_claims=auth_claims_unverified,
             credential_request=credential_request,
         )
 
     def issue_vc_OpenG2PRegistryVerifiableCredential(
-        self, proof_payload, credential_request
+        self, auth_claims, credential_request
     ):
         self.ensure_one()
         web_base_url = (
@@ -133,19 +132,23 @@ class OpenIDVCIssuer(models.Model):
             .search(
                 [
                     ("id_type", "=", self.auth_sub_id_type_id.id),
-                    ("value", "=", proof_payload["sub"]),
+                    ("value", "=", auth_claims["sub"]),
                 ],
                 limit=1,
             )
         )
         partner = None
         if not reg_id:
-            raise ValueError("ID not found in DB. Invalid Subject Received in proof")
+            raise ValueError(
+                "ID not found in DB. Invalid Subject Received in auth claims"
+            )
 
         partner = reg_id.partner_id
 
-        partner_dict = reg_id.partner_id.read()[0]
-        reg_id_dict = reg_id.read(["value", "id_type"])[0]
+        partner_dict = partner.read()[0]
+        reg_ids_dict = {
+            reg_id.id_type.name: reg_id.read()[0] for reg_id in partner.reg_ids
+        }
 
         curr_datetime = f'{datetime.utcnow().isoformat(timespec = "milliseconds")}Z'
         credential = jq.first(
@@ -161,7 +164,7 @@ class OpenIDVCIssuer(models.Model):
                     "partner_face": self.get_image_base64_data_in_url(
                         partner.image_1920
                     ),
-                    "reg_id": reg_id_dict,
+                    "reg_ids": reg_ids_dict,
                 },
             ),
         )
@@ -285,3 +288,15 @@ class OpenIDVCIssuer(models.Model):
         except Exception:
             _logger.exception("Could not set default contexts json")
         return text
+
+    @api.model
+    def verify_proof_and_bind(self, credential_request):
+        # TODO: Verify proof and do wallet binding
+        # request_proof_type = credential_request["proof"]["proof_type"]
+        # request_proof_jwt = credential_request["proof"]["jwt"]
+        # request_proof = None
+        # if request_proof_type and request_proof_jwt and request_proof_type == "jwt":
+        #     request_proof = jwt.get_unverified_claims(request_proof_jwt)
+        # else:
+        #     raise ValueError("Only JWT proof supported")
+        pass

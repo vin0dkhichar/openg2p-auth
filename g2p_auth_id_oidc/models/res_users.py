@@ -139,7 +139,7 @@ class ResUsers(models.Model):
                 date_format=oauth_provider.partner_creation_date_format,
             )
             partner_dict["reg_ids"] = self.process_ids(
-                oauth_provider.g2p_id_type, validation["user_id"]
+                oauth_provider.g2p_id_type, validation
             )
             phone_numbers, primary_phone = self.process_phones(
                 validation.pop("phone", "")
@@ -212,18 +212,33 @@ class ResUsers(models.Model):
             name += addl_name + " "
         return name.upper()
 
-    def process_ids(self, id_type, id_value, expiry_date=None):
-        return [
-            (
-                0,
-                0,
-                {
-                    "id_type": id_type.id,
-                    "value": id_value,
-                    "expiry_date": expiry_date,
-                },
-            )
-        ]
+    def process_ids(self, id_type, validation_dict, expiry_date=None):
+        reg_ids = []
+        for key, value in validation_dict.items():
+            if key.startswith("user_id"):
+                id_type_id = key.removeprefix("user_id")
+                if not id_type_id:
+                    id_type_id = id_type.id
+                else:
+                    try:
+                        id_type_id = int(id_type_id)
+                    except Exception:
+                        _logger.exception(
+                            "Invalid Id type mapping. Has to end with `user_id<int>`"
+                        )
+                        continue
+                reg_ids.append(
+                    (
+                        0,
+                        0,
+                        {
+                            "id_type": id_type_id,
+                            "value": value,
+                            "expiry_date": expiry_date,
+                        },
+                    )
+                )
+        return reg_ids
 
     def process_phones(self, phone):
         phone_numbers = []

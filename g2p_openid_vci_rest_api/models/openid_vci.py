@@ -15,7 +15,7 @@ class CredentialRequestDefintion(BaseModel, extra="allow"):
 
 class CredentialRequest(BaseModel):
     format: str
-    proof: CredetialRequestProof
+    proof: Optional[CredetialRequestProof] = None
     credential_definition: CredentialRequestDefintion
 
 

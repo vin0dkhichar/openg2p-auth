@@ -4,7 +4,7 @@
         (.web_base_url + "/api/v1/vci/.well-known/contexts.json")
     ],
     "id": .vc_id,
-    "type": .issuer.type,
+    "type": ["VerifiableCredential", .issuer.type],
     "issuer": .issuer.unique_issuer_id,
     "issuanceDate": .curr_datetime,
     "credentialSubject": {
@@ -51,6 +51,6 @@
         ],
         "postalCode": .partner_address.postal_code,
         "face": .partner_face,
-        "UIN": .reg_id.value
+        "UIN": .reg_ids["NATIONAL ID"]?.value
     }
 }

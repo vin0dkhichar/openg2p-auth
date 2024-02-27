@@ -2,8 +2,9 @@ import json
 import logging
 
 import pyjq as jq
+from werkzeug.exceptions import Unauthorized
 
-from odoo.http import Response
+from odoo.http import Response, request
 
 from odoo.addons.base_rest import restapi
 from odoo.addons.base_rest_pydantic.restapi import PydanticModel
@@ -43,10 +44,17 @@ class OpenIdVCIRestService(Component):
         output_param=PydanticModel(CredentialBaseResponse),
     )
     def post_credential(self, credential_request: CredentialRequest):
+        token = request.httprequest.headers.get("Authorization", "").removeprefix(
+            "Bearer"
+        )
+        if not token:
+            raise Unauthorized("Invalid Bearer Token received.")
         try:
             # TODO: Split into smaller steps to better handle errors
             return CredentialResponse(
-                **self.env["g2p.openid.vci.issuers"].issue_vc(credential_request.dict())
+                **self.env["g2p.openid.vci.issuers"].issue_vc(
+                    credential_request.dict(), token.strip()
+                )
             )
         except Exception as e:
             _logger.exception("Error while handling credential request")

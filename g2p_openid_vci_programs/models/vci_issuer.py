@@ -27,7 +27,7 @@ class BeneficiaryOpenIDVCIssuer(models.Model):
     program_id = fields.Many2one("g2p.program")
 
     def issue_vc_OpenG2PBeneficiaryVerifiableCredential(
-        self, proof_payload, credential_request
+        self, auth_claims, credential_request
     ):
         self.ensure_one()
         web_base_url = (
@@ -40,7 +40,7 @@ class BeneficiaryOpenIDVCIssuer(models.Model):
             .search(
                 [
                     ("id_type", "=", self.auth_sub_id_type_id.id),
-                    ("value", "=", proof_payload["sub"]),
+                    ("value", "=", auth_claims["sub"]),
                     (
                         "partner_id.program_membership_ids.program_id",
                         "=",
@@ -53,7 +53,7 @@ class BeneficiaryOpenIDVCIssuer(models.Model):
         partner = None
         if not reg_id:
             raise ValueError(
-                "ID not found in DB. Invalid Subject Received in proof. Or person not part of the program."
+                "ID not found in DB. Invalid Subject Received in auth claims. Or person not part of the program."
             )
 
         partner = reg_id.partner_id
@@ -63,8 +63,10 @@ class BeneficiaryOpenIDVCIssuer(models.Model):
         if program_membership_id.state != "enrolled":
             raise ValueError("Person not enrolled into program.")
 
-        partner_dict = reg_id.partner_id.read()[0]
-        reg_id_dict = reg_id.read(["value", "id_type"])[0]
+        partner_dict = partner.read()[0]
+        reg_ids_dict = {
+            reg_id.id_type.name: reg_id.read()[0] for reg_id in partner.reg_ids
+        }
         program_dict = self.program_id.read()[0]
 
         curr_datetime = f'{datetime.utcnow().isoformat(timespec = "milliseconds")}Z'
@@ -81,7 +83,7 @@ class BeneficiaryOpenIDVCIssuer(models.Model):
                     "partner_face": self.get_image_base64_data_in_url(
                         partner.image_1920
                     ),
-                    "reg_id": reg_id_dict,
+                    "reg_ids": reg_ids_dict,
                     "program": program_dict,
                 },
             ),
