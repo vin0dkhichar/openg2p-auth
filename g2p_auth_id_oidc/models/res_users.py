@@ -82,7 +82,6 @@ class ResUsers(models.Model):
         return self.env["res.users"].create(user_creation_dict)
 
     def generate_partner_signup(self, oauth_provider, validation, params):
-        oauth_uid = validation["user_id"]
         if oauth_provider.partner_creation_call_validate_url:
             userinfo_dict = self._auth_oauth_rpc(
                 oauth_provider.validation_endpoint, params["access_token"]
@@ -91,20 +90,20 @@ class ResUsers(models.Model):
                 userinfo_dict
             )
             validation.update(update_dict)
-            _logger.info(
+            _logger.debug(
                 "Userinfo JWT payload after validation call. %s",
                 json.dumps(userinfo_dict),
             )
-            _logger.info(
+            _logger.debug(
                 "Update dict after validation call. %s", json.dumps(update_dict)
             )
-            _logger.info(
+            _logger.debug(
                 "Validation Dict after validation call. %s", json.dumps(validation)
             )
         try:
             g2p_reg_id = self.env["g2p.reg.id"].search(
                 [
-                    ("value", "=", oauth_uid),
+                    ("value", "=", validation["user_id"]),
                     ("id_type", "=", oauth_provider.g2p_id_type.id),
                     ("partner_id.is_registrant", "=", True),
                     ("partner_id.is_group", "=", False),
@@ -123,7 +122,8 @@ class ResUsers(models.Model):
                 "family_name": name.split(" ")[-1],
                 "addl_name": " ".join(name.split(" ")[1:-1]),
                 "email": validation.pop(
-                    "email", "provider_%s_user_%s" % (oauth_provider.id, oauth_uid)
+                    "email",
+                    "provider_%s_user_%s" % (oauth_provider.id, validation["user_id"]),
                 ),
                 "is_registrant": True,
                 "is_group": False,
@@ -139,7 +139,7 @@ class ResUsers(models.Model):
                 date_format=oauth_provider.partner_creation_date_format,
             )
             partner_dict["reg_ids"] = self.process_ids(
-                oauth_provider.g2p_id_type, oauth_uid
+                oauth_provider.g2p_id_type, validation["user_id"]
             )
             phone_numbers, primary_phone = self.process_phones(
                 validation.pop("phone", "")
