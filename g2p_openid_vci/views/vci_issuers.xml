@@ -37,9 +37,9 @@ Part of OpenG2P. See LICENSE file for full copyright and licensing details.
                     <field name="auth_issuer_jwks_mapping" />
                     <field name="auth_allowed_client_ids" />
 
-                    <field name="contexts_to_include" />
-                    <field name="credential_subject_format" />
+                    <field name="credential_format" />
                     <field name="issuer_metadata_text" />
+                    <field name="contexts_json" />
                 </group>
             </form>
         </field>

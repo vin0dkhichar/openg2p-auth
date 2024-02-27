@@ -30,7 +30,9 @@ class BeneficiaryOpenIDVCIssuer(models.Model):
         self, proof_payload, credential_request
     ):
         self.ensure_one()
-        web_base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        web_base_url = (
+            self.env["ir.config_parameter"].sudo().get_param("web.base.url").rstrip("/")
+        )
 
         reg_id = (
             self.env["g2p.reg.id"]
@@ -66,32 +68,30 @@ class BeneficiaryOpenIDVCIssuer(models.Model):
         program_dict = self.program_id.read()[0]
 
         curr_datetime = f'{datetime.utcnow().isoformat(timespec = "milliseconds")}Z'
-        credential = {
-            "@context": jq.first(
-                self.contexts_to_include, {"web_base_url": web_base_url}
+        credential = jq.first(
+            self.credential_format,
+            RegistryJSONEncoder.python_dict_to_json_dict(
+                {
+                    "vc_id": str(uuid.uuid4()),
+                    "web_base_url": web_base_url,
+                    "issuer": self.read()[0],
+                    "curr_datetime": curr_datetime,
+                    "partner": partner_dict,
+                    "partner_address": self.get_full_address(partner.address),
+                    "partner_face": self.get_image_base64_data_in_url(
+                        partner.image_1920
+                    ),
+                    "reg_id": reg_id_dict,
+                    "program": program_dict,
+                },
             ),
-            "id": f"urn:uuid:{uuid.uuid4()}",
-            "type": self.type,
-            "issuer": self.unique_issuer_id,
-            "issuanceDate": curr_datetime,
-            "credentialSubject": jq.first(
-                self.credential_subject_format,
-                RegistryJSONEncoder.python_dict_to_json_dict(
-                    {
-                        "web_base_url": web_base_url,
-                        "partner": partner_dict,
-                        "partner_address": self.get_full_address(partner.address),
-                        "partner_face": self.get_image_base64_data_in_url(
-                            partner.image_1920
-                        ),
-                        "reg_id": reg_id_dict,
-                        "program": program_dict,
-                    }
-                ),
-            ),
-        }
+        )
         credential_response = {
             "credential": self.sign_and_issue_credential(credential),
             "format": credential_request["format"],
         }
         return credential_response
+
+    def set_from_static_file_OpenG2PBeneficiaryVerifiableCredential(self, **kwargs):
+        kwargs.setdefault("module_name", "g2p_openid_vci_programs")
+        return self.set_from_static_file_OpenG2PRegistryVerifiableCredential(**kwargs)

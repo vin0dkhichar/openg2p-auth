@@ -11,14 +11,9 @@ from cryptography.hazmat.primitives import hashes
 from jose import jwt
 from pyld import jsonld
 
-from odoo import api, fields, models, tools
+from odoo import api, fields, models, modules, tools
 
 from ..json_encoder import RegistryJSONEncoder
-from .constants import (
-    DEFAULT_CONTEXT_TO_INCLUDE,
-    DEFAULT_CREDENTIAL_SUBJECT_FORMAT,
-    DEFAULT_ISSUER_METADATA_TEXT,
-)
 
 _logger = logging.getLogger(__name__)
 
@@ -43,8 +38,6 @@ class OpenIDVCIssuer(models.Model):
     )
     unique_issuer_id = fields.Char(default="did:example:12345678abcdefgh")
 
-    contexts_to_include = fields.Text(default=DEFAULT_CONTEXT_TO_INCLUDE)
-
     encryption_provider_id = fields.Many2one("g2p.encryption.provider")
 
     auth_sub_id_type_id = fields.Many2one("g2p.id.type")
@@ -54,8 +47,9 @@ class OpenIDVCIssuer(models.Model):
     auth_issuer_jwks_mapping = fields.Text()
     auth_allowed_client_ids = fields.Text()
 
-    credential_subject_format = fields.Text(default=DEFAULT_CREDENTIAL_SUBJECT_FORMAT)
-    issuer_metadata_text = fields.Text(default=DEFAULT_ISSUER_METADATA_TEXT)
+    credential_format = fields.Text()
+    issuer_metadata_text = fields.Text()
+    contexts_json = fields.Text()
 
     @api.model
     def issue_vc(self, credential_request: dict):
@@ -154,29 +148,23 @@ class OpenIDVCIssuer(models.Model):
         reg_id_dict = reg_id.read(["value", "id_type"])[0]
 
         curr_datetime = f'{datetime.utcnow().isoformat(timespec = "milliseconds")}Z'
-        credential = {
-            "@context": jq.first(
-                self.contexts_to_include, {"web_base_url": web_base_url}
+        credential = jq.first(
+            self.credential_format,
+            RegistryJSONEncoder.python_dict_to_json_dict(
+                {
+                    "vc_id": str(uuid.uuid4()),
+                    "web_base_url": web_base_url,
+                    "issuer": self.read()[0],
+                    "curr_datetime": curr_datetime,
+                    "partner": partner_dict,
+                    "partner_address": self.get_full_address(partner.address),
+                    "partner_face": self.get_image_base64_data_in_url(
+                        partner.image_1920
+                    ),
+                    "reg_id": reg_id_dict,
+                },
             ),
-            "id": f"urn:uuid:{uuid.uuid4()}",
-            "type": self.type,
-            "issuer": self.unique_issuer_id,
-            "issuanceDate": curr_datetime,
-            "credentialSubject": jq.first(
-                self.credential_subject_format,
-                RegistryJSONEncoder.python_dict_to_json_dict(
-                    {
-                        "web_base_url": web_base_url,
-                        "partner": partner_dict,
-                        "partner_address": self.get_full_address(partner.address),
-                        "partner_face": self.get_image_base64_data_in_url(
-                            partner.image_1920
-                        ),
-                        "reg_id": reg_id_dict,
-                    },
-                ),
-            ),
-        }
+        )
         credential_response = {
             "credential": self.sign_and_issue_credential(credential),
             "format": credential_request["format"],
@@ -256,3 +244,44 @@ class OpenIDVCIssuer(models.Model):
         sha = hashes.Hash(hashes.SHA256())
         sha.update(data)
         return sha.finalize()
+
+    @api.constrains("credential_format", "type")
+    def onchange_credential_format(self):
+        for rec in self:
+            if not rec.credential_format:
+                getattr(rec, f"set_from_static_file_{rec.type}")(
+                    file_name="default_credential_format.jq",
+                    field_name="credential_format",
+                )
+
+    @api.constrains("issuer_metadata_text", "type")
+    def onchange_issuer_metadata_text(self):
+        for rec in self:
+            if not rec.issuer_metadata_text:
+                getattr(rec, f"set_from_static_file_{rec.type}")(
+                    file_name="default_issuer_metadata.jq",
+                    field_name="issuer_metadata_text",
+                )
+
+    @api.constrains("contexts_json", "type")
+    def onchange_contexts_json(self):
+        for rec in self:
+            if not rec.contexts_json:
+                getattr(rec, f"set_from_static_file_{rec.type}")(
+                    file_name="default_contexts.json",
+                    field_name="contexts_json",
+                )
+
+    def set_from_static_file_OpenG2PRegistryVerifiableCredential(
+        self, module_name="g2p_openid_vci", file_name="", field_name="", **kwargs
+    ):
+        default_path = modules.get_resource_path(module_name, "static", file_name)
+        text = ""
+        try:
+            with open(default_path) as file:
+                text = file.read()
+                if field_name:
+                    self.write({field_name: text})
+        except Exception:
+            _logger.exception("Could not set default contexts json")
+        return text

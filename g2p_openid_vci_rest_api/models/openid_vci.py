@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from pydantic import BaseModel  # pylint: disable=[W7936]
 
@@ -49,16 +49,17 @@ class CredentialIssuerDisplayResponse(BaseModel):
 
 
 class CredentialIssuerConfigResponse(BaseModel):
+    id: Optional[str] = None
     format: str
     scope: str
     cryptographic_binding_methods_supported: List[str]
     credential_signing_alg_values_supported: List[str]
     credential_definition: Dict
-    proof_types_supported: Dict
+    proof_types_supported: Union[Dict, List]
     display: List[CredentialIssuerDisplayResponse]
 
 
 class CredentialIssuerResponse(BaseModel):
     credential_issuer: str
     credential_endpoint: str
-    credential_configurations_supported: Dict[str, CredentialIssuerConfigResponse]
+    credential_configurations_supported: Union[List[CredentialIssuerConfigResponse], Dict[str, CredentialIssuerConfigResponse]]
