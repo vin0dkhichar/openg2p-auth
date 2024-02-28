@@ -172,7 +172,7 @@ class OpenIDVCIssuer(models.Model):
             "credential": self.sign_and_issue_credential(credential),
             "format": credential_request["format"],
         }
-        return credential_response
+        _logger.info("Credential Response for DEBUG;", json.dumps(credential_response))
 
     def sign_and_issue_credential(self, credential: dict) -> dict:
         self.ensure_one()
@@ -199,11 +199,18 @@ class OpenIDVCIssuer(models.Model):
 
     def build_empty_ld_proof(self):
         self.ensure_one()
+        curr_datetime = f'{datetime.utcnow().isoformat(timespec = "milliseconds")}Z'
+        web_base_url = (
+            self.env["ir.config_parameter"].sudo().get_param("web.base.url").rstrip("/")
+        )
+        # TODO: Remove this hardcoding
         return {
             "@context": [
                 "https://w3id.org/security/v2",
             ],
             "type": "RsaSignature2018",
+            "created": curr_datetime,
+            "verificationMethod": f"{web_base_url}/api/v1/security/.well-known/jwks.json",
             "proofPurpose": "assertionMethod",
         }
 
@@ -246,7 +253,7 @@ class OpenIDVCIssuer(models.Model):
     def sha256_digest(self, data: bytes) -> bytes:
         sha = hashes.Hash(hashes.SHA256())
         sha.update(data)
-        return sha.finalize()
+        return sha.finalize()[0:32]
 
     @api.constrains("credential_format", "type")
     def onchange_credential_format(self):
