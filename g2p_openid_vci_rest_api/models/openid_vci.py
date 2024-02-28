@@ -1,25 +1,33 @@
+# pylint: disable=[W7936]
+
 from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel  # pylint: disable=[W7936]
+from extendable_pydantic import ExtendableModelMeta
+from pydantic import BaseModel
 
 
-class CredetialRequestProof(BaseModel):
+class VCIBaseModel(BaseModel, metaclass=ExtendableModelMeta):
+    class Config:
+        extra = "allow"
+
+
+class CredetialRequestProof(VCIBaseModel):
     proof_type: str
     jwt: Optional[str] = None
     cwt: Optional[str] = None
 
 
-class CredentialRequestDefintion(BaseModel, extra="allow"):
+class CredentialRequestDefintion(VCIBaseModel):
     type: List[str]
 
 
-class CredentialRequest(BaseModel):
+class CredentialRequest(VCIBaseModel):
     format: str
     proof: Optional[CredetialRequestProof] = None
     credential_definition: CredentialRequestDefintion
 
 
-class CredentialBaseResponse(BaseModel, extra="allow"):
+class CredentialBaseResponse(VCIBaseModel):
     c_nonce: Optional[str] = None
     c_nonce_expires_in: Optional[int] = None
 
@@ -35,12 +43,12 @@ class CredentialErrorResponse(CredentialBaseResponse):
     error_description: str
 
 
-class CredentialIssuerDisplayLogoResponse(BaseModel):
+class CredentialIssuerDisplayLogoResponse(VCIBaseModel):
     url: str
     alt_text: str
 
 
-class CredentialIssuerDisplayResponse(BaseModel):
+class CredentialIssuerDisplayResponse(VCIBaseModel):
     name: str
     locale: str
     logo: CredentialIssuerDisplayLogoResponse
@@ -48,7 +56,7 @@ class CredentialIssuerDisplayResponse(BaseModel):
     text_color: str
 
 
-class CredentialIssuerConfigResponse(BaseModel):
+class CredentialIssuerConfigResponse(VCIBaseModel):
     id: Optional[str] = None
     format: str
     scope: str
@@ -59,7 +67,7 @@ class CredentialIssuerConfigResponse(BaseModel):
     display: List[CredentialIssuerDisplayResponse]
 
 
-class CredentialIssuerResponse(BaseModel):
+class CredentialIssuerResponse(VCIBaseModel):
     credential_issuer: str
     credential_endpoint: str
     credentials_supported: Optional[List[CredentialIssuerConfigResponse]] = None
