@@ -162,7 +162,7 @@ class OpenIDVCIssuer(models.Model):
                     "partner": partner_dict,
                     "partner_address": self.get_full_address(partner.address),
                     "partner_face": self.get_image_base64_data_in_url(
-                        partner.image_1920
+                        partner.image_1920.decode()
                     ),
                     "reg_ids": reg_ids_dict,
                 },
