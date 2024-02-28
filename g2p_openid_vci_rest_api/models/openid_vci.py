@@ -62,6 +62,7 @@ class CredentialIssuerConfigResponse(BaseModel):
 class CredentialIssuerResponse(BaseModel):
     credential_issuer: str
     credential_endpoint: str
-    credential_configurations_supported: Union[
-        List[CredentialIssuerConfigResponse], Dict[str, CredentialIssuerConfigResponse]
-    ]
+    credentials_supported: Optional[List[CredentialIssuerConfigResponse]] = None
+    credential_configurations_supported: Optional[
+        Dict[str, CredentialIssuerConfigResponse]
+    ] = None

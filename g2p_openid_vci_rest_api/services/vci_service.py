@@ -77,8 +77,27 @@ class OpenIdVCIRestService(Component):
         ],
         output_param=PydanticModel(CredentialIssuerResponse),
     )
-    def get_openid_credential_issuer(self):
-        vci_issuers = self.env["g2p.openid.vci.issuers"].sudo().search([]).read()
+    def get_openid_credential_issuers_all(self):
+        return self.get_openid_credential_issuer()
+
+    @restapi.method(
+        [
+            (
+                [
+                    "/.well-known/openid-credential-issuer/<string:issuer_name>",
+                ],
+                "GET",
+            )
+        ],
+        output_param=PydanticModel(CredentialIssuerResponse),
+    )
+    def get_openid_credential_issuer(self, issuer_name=""):
+        search_domain = []
+        if issuer_name:
+            search_domain.append(("name", "=", issuer_name))
+        vci_issuers = (
+            self.env["g2p.openid.vci.issuers"].sudo().search(search_domain).read()
+        )
         web_base_url = (
             self.env["ir.config_parameter"].sudo().get_param("web.base.url").rstrip("/")
         )
@@ -98,8 +117,11 @@ class OpenIdVCIRestService(Component):
         response = {
             "credential_issuer": web_base_url,
             "credential_endpoint": f"{web_base_url}/api/v1/vci/credential",
-            "credential_configurations_supported": cred_configs,
         }
+        if isinstance(cred_configs, list):
+            response["credentials_supported"] = cred_configs
+        elif isinstance(cred_configs, dict):
+            response["credential_configurations_supported"] = cred_configs
         return CredentialIssuerResponse(**response)
 
     @restapi.method(
