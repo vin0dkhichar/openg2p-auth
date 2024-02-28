@@ -114,10 +114,12 @@ class OpenIDVCIssuer(models.Model):
 
         issue_vc_func = getattr(credential_issuer, f"issue_vc_{credential_issuer.type}")
 
-        return issue_vc_func(
+        cred_res = issue_vc_func(
             auth_claims=auth_claims_unverified,
             credential_request=credential_request,
         )
+        _logger.debug("Credential Response for DEBUG; %s", json.dumps(cred_res))
+        return cred_res
 
     def issue_vc_OpenG2PRegistryVerifiableCredential(
         self, auth_claims, credential_request
@@ -172,7 +174,7 @@ class OpenIDVCIssuer(models.Model):
             "credential": self.sign_and_issue_credential(credential),
             "format": credential_request["format"],
         }
-        _logger.info("Credential Response for DEBUG;", json.dumps(credential_response))
+        return credential_response
 
     def sign_and_issue_credential(self, credential: dict) -> dict:
         self.ensure_one()
