@@ -51,12 +51,24 @@
         ],
         "postalCode": .partner_address.postal_code,
         "face": .partner_face,
-        "UIN": .reg_ids["NATIONAL ID"]?.value,
+        "nationalId": .reg_ids["NATIONAL ID"]?.value,
+        "UIN": (
+            (.reg_ids["NATIONAL ID"]?.value[0:5] | explode | reverse | implode)
+            + (.reg_ids["NATIONAL ID"]?.value[6:10] | explode | reverse| implode)
+        ),
         "programName": [
             {
                 "language": "eng",
                 "value": .program.name
             }
-        ]
+        ],
+        "validUntil": (
+            .curr_datetime
+            | sub(".[0-9]+Z$"; "Z")
+            | strptime("%Y-%m-%dT%H:%M:%SZ")
+            | mktime
+            | . + 31556926
+            | strftime("%Y-%m-%d")
+        )
     }
 }

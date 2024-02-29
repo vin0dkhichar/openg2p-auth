@@ -53,6 +53,14 @@
                 "UIN": {
                     "display": [
                         {
+                            "name": "Beneficiary ID",
+                            "locale": "en"
+                        }
+                    ]
+                },
+                "nationalID": {
+                    "display": [
+                        {
                             "name": "National ID",
                             "locale": "en"
                         }
@@ -75,8 +83,7 @@
         "order": [
             "fullName",
             "gender",
-            "dateOfBirth",
-            "address"
+            "dateOfBirth"
         ]
     }
 ]

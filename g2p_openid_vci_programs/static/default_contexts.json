@@ -82,6 +82,7 @@
               "face": "face",
               "vcVer": "vcVer",
               "UIN": "UIN",
+              "nationalId": "nationalId",
               "programName": {
                 "@id": "programName",
                 "@type": "@id",
@@ -89,7 +90,8 @@
                   "value": "@value",
                   "language": "@language"
                 }
-              }
+              },
+              "validUntil": "validUntil"
             }
           }
         }

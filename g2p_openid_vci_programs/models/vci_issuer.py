@@ -64,6 +64,7 @@ class BeneficiaryOpenIDVCIssuer(models.Model):
             raise ValueError("Person not enrolled into program.")
 
         partner_dict = partner.read()[0]
+        program_membership_dict = program_membership_id.read()[0]
         reg_ids_dict = {
             reg_id.id_type.name: reg_id.read()[0] for reg_id in partner.reg_ids
         }
@@ -84,6 +85,7 @@ class BeneficiaryOpenIDVCIssuer(models.Model):
                         partner.image_1920.decode()
                     ),
                     "reg_ids": reg_ids_dict,
+                    "program_membership": program_membership_dict,
                     "program": program_dict,
                 },
             ),

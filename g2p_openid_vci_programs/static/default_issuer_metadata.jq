@@ -53,6 +53,14 @@
                 "UIN": {
                     "display": [
                         {
+                            "name": "Beneficiary ID",
+                            "locale": "en"
+                        }
+                    ]
+                },
+                "nationalID": {
+                    "display": [
+                        {
                             "name": "National ID",
                             "locale": "en"
                         }
@@ -62,6 +70,14 @@
                     "display": [
                         {
                             "name": "Program Name",
+                            "locale": "en"
+                        }
+                    ]
+                },
+                "validUntil": {
+                    "display": [
+                        {
+                            "name": "Valid until",
                             "locale": "en"
                         }
                     ]
@@ -76,7 +92,7 @@
                     "url": (.web_base_url + "/g2p_openid_vci_programs/static/description/icon.png"),
                     "alt_text": "a square logo of a OpenG2P"
                 },
-                "background_color": "#cf83d6",
+                "background_color": "#f5c538",
                 "text_color": "#03096e"
             }
         ],
@@ -85,7 +101,7 @@
             "programName",
             "gender",
             "dateOfBirth",
-            "address"
+            "validUntil"
         ]
     }
 ]
