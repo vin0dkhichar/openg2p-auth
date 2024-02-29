@@ -4,7 +4,7 @@ import logging
 import pyjq as jq
 from werkzeug.exceptions import Unauthorized
 
-from odoo.http import Response, request
+from odoo.http import request
 
 from odoo.addons.base_rest import restapi
 from odoo.addons.base_rest_pydantic.restapi import PydanticModel
@@ -17,6 +17,7 @@ from ..models.openid_vci import (
     CredentialIssuerResponse,
     CredentialRequest,
     CredentialResponse,
+    VCIBaseModel,
 )
 
 _logger = logging.getLogger(__name__)
@@ -133,6 +134,7 @@ class OpenIdVCIRestService(Component):
                 "GET",
             )
         ],
+        output_param=PydanticModel(VCIBaseModel),
     )
     def get_openid_contexts_json(self):
         web_base_url = (
@@ -150,6 +152,4 @@ class OpenIdVCIRestService(Component):
                         "@context"
                     ]
                 )
-        return Response(
-            json.dumps(final_context, indent=2), mimetype="application/json"
-        )
+        return VCIBaseModel(**final_context)

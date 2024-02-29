@@ -18,19 +18,43 @@
                 .type
             ],
             "credentialSubject": {
-                "given_name": {
+                "fullName": {
                     "display": [
                         {
-                            "name": "Given Name",
-                            "locale": "en-US"
+                            "name": "Name",
+                            "locale": "en"
                         }
                     ]
                 },
-                "family_name": {
+                "gender": {
                     "display": [
                         {
-                            "name": "Surname",
-                            "locale": "en-US"
+                            "name": "Gender",
+                            "locale": "en"
+                        }
+                    ]
+                },
+               "dateOfBirth": {
+                    "display": [
+                        {
+                            "name": "Date of Birth",
+                            "locale": "en"
+                        }
+                    ]
+                },
+                "address": {
+                    "display": [
+                        {
+                            "name": "Address",
+                            "locale": "en"
+                        }
+                    ]
+                },
+                "UIN": {
+                    "display": [
+                        {
+                            "name": "National ID",
+                            "locale": "en"
                         }
                     ]
                 }
@@ -47,6 +71,12 @@
                 "background_color": "#12107c",
                 "text_color": "#FFFFFF"
             }
+        ],
+        "order": [
+            "fullName",
+            "gender",
+            "dateOfBirth",
+            "address"
         ]
     }
 ]

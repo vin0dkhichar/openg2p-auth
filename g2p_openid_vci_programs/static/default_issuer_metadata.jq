@@ -18,19 +18,51 @@
                 .type
             ],
             "credentialSubject": {
-                "given_name": {
+                "fullName": {
                     "display": [
                         {
-                            "name": "Given Name",
-                            "locale": "en-US"
+                            "name": "Name",
+                            "locale": "en"
                         }
                     ]
                 },
-                "family_name": {
+                "gender": {
                     "display": [
                         {
-                            "name": "Surname",
-                            "locale": "en-US"
+                            "name": "Gender",
+                            "locale": "en"
+                        }
+                    ]
+                },
+               "dateOfBirth": {
+                    "display": [
+                        {
+                            "name": "Date of Birth",
+                            "locale": "en"
+                        }
+                    ]
+                },
+                "address": {
+                    "display": [
+                        {
+                            "name": "Address",
+                            "locale": "en"
+                        }
+                    ]
+                },
+                "UIN": {
+                    "display": [
+                        {
+                            "name": "National ID",
+                            "locale": "en"
+                        }
+                    ]
+                },
+                "programName": {
+                    "display": [
+                        {
+                            "name": "Program Name",
+                            "locale": "en"
                         }
                     ]
                 }
@@ -44,9 +76,16 @@
                     "url": (.web_base_url + "/g2p_openid_vci_programs/static/description/icon.png"),
                     "alt_text": "a square logo of a OpenG2P"
                 },
-                "background_color": "#12107c",
-                "text_color": "#FFFFFF"
+                "background_color": "#cf83d6",
+                "text_color": "#03096e"
             }
+        ],
+        "order": [
+            "fullName",
+            "programName",
+            "gender",
+            "dateOfBirth",
+            "address"
         ]
     }
 ]

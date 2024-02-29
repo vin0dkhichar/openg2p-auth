@@ -57,6 +57,6 @@
                 "language": "eng",
                 "value": .program.name
             }
-        ],
+        ]
     }
 }
