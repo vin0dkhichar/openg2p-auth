@@ -1,11 +1,4 @@
-import logging
-
 from odoo import fields, models
-
-try:
-    from jose import jwt
-except ImportError:
-    logging.getLogger(__name__).debug("jose library not installed")
 
 
 class G2PAuthIDOidcProvider(models.Model):
@@ -37,25 +30,6 @@ class G2PAuthIDOidcProvider(models.Model):
         help="Map login attribure from validation response on User Creation",
         default="email",
     )
-
-    def _parse_id_token(self, id_token, access_token):
-        # This method is only reimplemented here temporarily. To prevent atHash validation
-        self.ensure_one()
-        res = {}
-        header = jwt.get_unverified_header(id_token)
-        res.update(
-            jwt.decode(
-                id_token,
-                self._get_key(header.get("kid")),
-                algorithms=["RS256"],
-                audience=self.client_id,
-                access_token=access_token,
-                options={"verify_at_hash": False},
-            )
-        )
-
-        res.update(self._map_token_values(res))
-        return res
 
     def map_validation_response_partner_creation(self, req):
         res = {}

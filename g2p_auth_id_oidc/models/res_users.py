@@ -82,7 +82,6 @@ class ResUsers(models.Model):
         return self.env["res.users"].create(user_creation_dict)
 
     def generate_partner_signup(self, oauth_provider, validation, params):
-        oauth_uid = validation["user_id"]
         if oauth_provider.partner_creation_call_validate_url:
             userinfo_dict = self._auth_oauth_rpc(
                 oauth_provider.validation_endpoint, params["access_token"]
@@ -91,20 +90,20 @@ class ResUsers(models.Model):
                 userinfo_dict
             )
             validation.update(update_dict)
-            _logger.info(
+            _logger.debug(
                 "Userinfo JWT payload after validation call. %s",
                 json.dumps(userinfo_dict),
             )
-            _logger.info(
+            _logger.debug(
                 "Update dict after validation call. %s", json.dumps(update_dict)
             )
-            _logger.info(
+            _logger.debug(
                 "Validation Dict after validation call. %s", json.dumps(validation)
             )
         try:
             g2p_reg_id = self.env["g2p.reg.id"].search(
                 [
-                    ("value", "=", oauth_uid),
+                    ("value", "=", validation["user_id"]),
                     ("id_type", "=", oauth_provider.g2p_id_type.id),
                     ("partner_id.is_registrant", "=", True),
                     ("partner_id.is_group", "=", False),
@@ -123,7 +122,8 @@ class ResUsers(models.Model):
                 "family_name": name.split(" ")[-1],
                 "addl_name": " ".join(name.split(" ")[1:-1]),
                 "email": validation.pop(
-                    "email", "provider_%s_user_%s" % (oauth_provider.id, oauth_uid)
+                    "email",
+                    "provider_%s_user_%s" % (oauth_provider.id, validation["user_id"]),
                 ),
                 "is_registrant": True,
                 "is_group": False,
@@ -139,7 +139,7 @@ class ResUsers(models.Model):
                 date_format=oauth_provider.partner_creation_date_format,
             )
             partner_dict["reg_ids"] = self.process_ids(
-                oauth_provider.g2p_id_type, oauth_uid
+                oauth_provider.g2p_id_type, validation
             )
             phone_numbers, primary_phone = self.process_phones(
                 validation.pop("phone", "")
@@ -181,11 +181,9 @@ class ResUsers(models.Model):
 
         if response.ok:  # nb: could be a successful failure
             if response.headers.get("content-type"):
-                # TODO: Improve the following
                 if "application/jwt" in response.headers["content-type"]:
-                    return jwt.decode(
-                        response.text, None, options={"verify_signature": False}
-                    )
+                    # TODO: Improve the following
+                    return jwt.get_unverified_claims(response.text)
                 if "application/json" in response.headers["content-type"]:
                     return response.json()
         auth_challenge = werkzeug.http.parse_www_authenticate_header(
@@ -214,18 +212,33 @@ class ResUsers(models.Model):
             name += addl_name + " "
         return name.upper()
 
-    def process_ids(self, id_type, id_value, expiry_date=None):
-        return [
-            (
-                0,
-                0,
-                {
-                    "id_type": id_type.id,
-                    "value": id_value,
-                    "expiry_date": expiry_date,
-                },
-            )
-        ]
+    def process_ids(self, id_type, validation_dict, expiry_date=None):
+        reg_ids = []
+        for key, value in validation_dict.items():
+            if key.startswith("user_id"):
+                id_type_id = key.removeprefix("user_id")
+                if not id_type_id:
+                    id_type_id = id_type.id
+                else:
+                    try:
+                        id_type_id = int(id_type_id)
+                    except Exception:
+                        _logger.exception(
+                            "Invalid Id type mapping. Has to end with `user_id<int>`"
+                        )
+                        continue
+                reg_ids.append(
+                    (
+                        0,
+                        0,
+                        {
+                            "id_type": id_type_id,
+                            "value": value,
+                            "expiry_date": expiry_date,
+                        },
+                    )
+                )
+        return reg_ids
 
     def process_phones(self, phone):
         phone_numbers = []
