@@ -8,9 +8,10 @@
     "website": "https://github.com/OpenG2P/openg2p-auth",
     "license": "Other OSI approved licence",
     "development_status": "Alpha",
-    "depends": ["auth_oidc", "g2p_registry_base"],
+    "depends": ["g2p_registry_base"],
     "data": [
-        "views/g2p_auth_id_oidc_provider.xml",
+        # TODO: The 'auth_oidc' module was removed; a replacement is needed in the code.
+        # "views/g2p_auth_id_oidc_provider.xml",
     ],
     "assets": {
         "web.assets_backend": [],
