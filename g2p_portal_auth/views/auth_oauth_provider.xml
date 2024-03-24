@@ -1,10 +1,9 @@
 <?xml version="1.0" ?>
 <odoo>
-    <!-- TODO: The 'auth_oidc' module was removed; a replacement is needed in the code -->
-    <!-- <record model="ir.ui.view" id="view_g2p_portal_oauth_provider_form">
+    <record model="ir.ui.view" id="view_g2p_portal_oauth_provider_form">
         <field name="name">g2p.portal.oauth.provider.form</field>
         <field name="model">auth.oauth.provider</field>
-        <field name="inherit_id" ref="auth_oidc.view_oidc_provider_form" />
+        <field name="inherit_id" ref="auth_oauth.view_oauth_provider_form" />
         <field name="arch" type="xml">
             <field name="enabled" position="after">
                 <field name="g2p_self_service_allowed" />
@@ -13,5 +12,5 @@
                 <field name="g2p_portal_oauth_callback_url" />
             </field>
         </field>
-    </record> -->
+    </record>
 </odoo>

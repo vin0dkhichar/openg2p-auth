@@ -8,10 +8,11 @@
     "website": "https://openg2p.org",
     "license": "Other OSI approved licence",
     "development_status": "Alpha",
-    "depends": [],
+    # TODO: Find a replacement for auth_oidc module.
+    # Temporarily using auth_oauth.
+    "depends": ["auth_oauth"],
     "data": [
-        # TODO: The 'auth_oidc' module was removed; a replacement is needed in the code.
-        # "views/auth_oauth_provider.xml",
+        "views/auth_oauth_provider.xml",
     ],
     "assets": {
         "web.assets_backend": [],
