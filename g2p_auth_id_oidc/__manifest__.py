@@ -6,7 +6,7 @@
     "sequence": 1,
     "author": "OpenG2P",
     "website": "https://openg2p.org",
-    "license": "Other OSI approved licence",
+    "license": "MPL-2",
     "development_status": "Alpha",
     # TODO: Find a replacement for auth_oidc module.
     # Temporarily using auth_oauth.
