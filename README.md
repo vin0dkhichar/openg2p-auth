@@ -1,8 +1,8 @@
 
 <!-- /!\ Non OCA Context : Set here the badge of your runbot / runboat instance. -->
-[![Pre-commit Status](https://github.com/OpenG2P/openg2p-auth/actions/workflows/pre-commit.yml/badge.svg?branch=17.0)](https://github.com/OpenG2P/openg2p-auth/actions/workflows/pre-commit.yml?query=branch%3A17.0)
-[![Build Status](https://github.com/OpenG2P/openg2p-auth/actions/workflows/test.yml/badge.svg?branch=17.0)](https://github.com/OpenG2P/openg2p-auth/actions/workflows/test.yml?query=branch%3A17.0)
-[![codecov](https://codecov.io/gh/OpenG2P/openg2p-auth/branch/17.0/graph/badge.svg)](https://codecov.io/gh/OpenG2P/openg2p-auth)
+[![Pre-commit Status](https://github.com/OpenG2P/openg2p-auth/actions/workflows/pre-commit.yml/badge.svg?branch=17.0-develop)](https://github.com/OpenG2P/openg2p-auth/actions/workflows/pre-commit.yml?query=branch%3A17.0-develop)
+[![Build Status](https://github.com/OpenG2P/openg2p-auth/actions/workflows/test.yml/badge.svg?branch=17.0-develop)](https://github.com/OpenG2P/openg2p-auth/actions/workflows/test.yml?query=branch%3A17.0-develop)
+[![codecov](https://codecov.io/gh/OpenG2P/openg2p-auth/branch/17.0-develop/graph/badge.svg)](https://codecov.io/gh/OpenG2P/openg2p-auth)
 <!-- /!\ Non OCA Context : Set here the badge of your translation instance. -->
 
 <!-- /!\ do not modify above this line -->
@@ -21,7 +21,8 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[g2p_auth_id_oidc](g2p_auth_id_oidc/) | 15.0.1.2.0 |  | G2P Auth: OIDC - Reg ID
+[g2p_auth_id_oidc](g2p_auth_id_oidc/) | 17.0.1.2.0 |  | G2P Auth: OIDC - Reg ID
+[g2p_portal_auth](g2p_portal_auth/) | 17.0.1.2.0 |  | G2P Portal Auth
 
 [//]: # (end addons)
 
