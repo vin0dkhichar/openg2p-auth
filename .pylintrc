@@ -9,7 +9,7 @@ readme-template-url="https://github.com/OCA/maintainer-tools/blob/master/templat
 manifest-required-authors=OpenG2P
 manifest-required-keys=license
 manifest-deprecated-keys=description,active
-license-allowed=AGPL-3,GPL-2,GPL-2 or any later version,GPL-3,GPL-3 or any later version,LGPL-3,MPL-2
+license-allowed=AGPL-3,GPL-2,GPL-2 or any later version,GPL-3,GPL-3 or any later version,LGPL-3,Other OSI approved licence
 valid-odoo-versions=17.0
 
 [MESSAGES CONTROL]
