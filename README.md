@@ -21,9 +21,6 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [g2p_auth_id_oidc](g2p_auth_id_oidc/) | 15.0.1.2.0 |  | G2P Auth: OIDC - Reg ID
-[g2p_openid_vci](g2p_openid_vci/) | 15.0.1.2.0 |  | G2P OpenID VCI: Base
-[g2p_openid_vci_programs](g2p_openid_vci_programs/) | 15.0.1.2.0 |  | G2P OpenID VCI: Program Beneficiaries
-[g2p_openid_vci_rest_api](g2p_openid_vci_rest_api/) | 15.0.1.2.0 |  | G2P OpenID VCI: Rest API
 [g2p_portal_auth](g2p_portal_auth/) | 15.0.1.2.0 |  | G2P Portal Auth
 
 [//]: # (end addons)
