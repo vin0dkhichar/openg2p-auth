@@ -1,27 +1,26 @@
-import logging
-
 from odoo import fields, models
-
-try:
-    from jose import jwt
-except ImportError:
-    logging.getLogger(__name__).debug("jose library not installed")
 
 
 class G2PAuthIDOidcProvider(models.Model):
     _inherit = "auth.oauth.provider"
 
     g2p_oidc_id_to_use = fields.Boolean("Use G2P Reg ID", default=False)
-    g2p_id_type = fields.Many2one(
-        "g2p.id.type", "G2P Registrant ID Type", required=False
-    )
+    g2p_id_type = fields.Many2one("g2p.id.type", "G2P Registrant ID Type", required=False)
     partner_creation_call_validate_url = fields.Boolean(
         help="Whether to call Validation Url for data during Partner Creation",
         default=False,
     )
     partner_creation_validate_response_mapping = fields.Char(
         help="Map Fields from Validation_url response while Partner Creation",
-        default="name:name email:email phone_number:phone_number birthdate:birthdate gender:gender address:address",
+        default=(
+            "name:name "
+            "email:email "
+            "phone_number:phone "
+            "birthdate:birthdate "
+            "gender:gender "
+            "address:address "
+            "picture:picture "
+        ),
     )
     partner_creation_date_format = fields.Char(
         help="Format of date to be used while Partner Creation",
@@ -38,29 +37,10 @@ class G2PAuthIDOidcProvider(models.Model):
         default="email",
     )
 
-    def _parse_id_token(self, id_token, access_token):
-        # This method is only reimplemented here temporarily. To prevent atHash validation
-        self.ensure_one()
-        res = {}
-        header = jwt.get_unverified_header(id_token)
-        res.update(
-            jwt.decode(
-                id_token,
-                self._get_key(header.get("kid")),
-                algorithms=["RS256"],
-                audience=self.client_id,
-                access_token=access_token,
-                options={"verify_at_hash": False},
-            )
-        )
-
-        res.update(self._map_token_values(res))
-        return res
-
     def map_validation_response_partner_creation(self, req):
         res = {}
         if self.partner_creation_validate_response_mapping:
             for pair in self.partner_creation_validate_response_mapping.split(" "):
-                from_key, to_key = [k.strip() for k in pair.split(":", 1)]
+                from_key, to_key = (k.strip() for k in pair.split(":", 1))
                 res[to_key] = req.get(from_key, "")
         return res
