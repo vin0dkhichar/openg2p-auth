@@ -19,7 +19,7 @@ class G2PAuthIDOidcProvider(models.Model):
             "birthdate:birthdate "
             "gender:gender "
             "address:address "
-            "picture:picture "
+            "picture:picture"
         ),
     )
     partner_creation_date_format = fields.Char(
@@ -41,6 +41,7 @@ class G2PAuthIDOidcProvider(models.Model):
         res = {}
         if self.partner_creation_validate_response_mapping:
             for pair in self.partner_creation_validate_response_mapping.split(" "):
-                from_key, to_key = (k.strip() for k in pair.split(":", 1))
-                res[to_key] = req.get(from_key, "")
+                if pair:
+                    from_key, to_key = (k.strip() for k in pair.split(":", 1))
+                    res[to_key] = req.get(from_key, "")
         return res
