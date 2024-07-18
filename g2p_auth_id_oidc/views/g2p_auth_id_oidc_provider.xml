@@ -1,25 +1,13 @@
 <?xml version="1.0" ?>
 <odoo>
-    <record model="ir.ui.view" id="view_g2p_id_oidc_provider_form">
-        <field name="name">g2p.auth.id.oidc.provider.form</field>
+    <record id="view_g2p_id_oidc_provider_form" model="ir.ui.view">
+        <field name="name">view_g2p_id_oidc_provider_form</field>
         <field name="model">auth.oauth.provider</field>
         <field name="inherit_id" ref="auth_oauth.view_oauth_provider_form" />
         <field name="arch" type="xml">
             <sheet position="inside">
                 <group string="G2P Reg ID Settings">
-                    <field name="g2p_oidc_id_to_use" />
-                    <field name="g2p_id_type" invisible="not g2p_oidc_id_to_use" />
-                    <field name="partner_creation_call_validate_url" invisible="not g2p_oidc_id_to_use" />
-                    <field
-                        name="partner_creation_validate_response_mapping"
-                        invisible="not g2p_oidc_id_to_use"
-                    />
-                    <field name="partner_creation_date_format" invisible="not g2p_oidc_id_to_use" />
-                    <field name="default_group_user_creation" invisible="not g2p_oidc_id_to_use" />
-                    <field
-                        name="login_attribute_mapping_on_user_creation"
-                        invisible="not g2p_oidc_id_to_use"
-                    />
+                    <field name="g2p_id_type" />
                 </group>
             </sheet>
         </field>
