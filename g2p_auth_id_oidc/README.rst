@@ -45,17 +45,17 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * OpenG2P
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* Lalith Kota <kotalalith@gmail.com>
+-  Lalith Kota <kotalalith@gmail.com>
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is part of the `OpenG2P/openg2p-auth <https://github.com/OpenG2P/openg2p-auth/tree/17.0-develop/g2p_auth_id_oidc>`_ project on GitHub.
 

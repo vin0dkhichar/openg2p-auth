@@ -45,12 +45,12 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * OpenG2P
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is part of the `OpenG2P/openg2p-auth <https://github.com/OpenG2P/openg2p-auth/tree/17.0-develop/g2p_portal_auth>`_ project on GitHub.
 
