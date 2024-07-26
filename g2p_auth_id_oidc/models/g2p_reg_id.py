@@ -26,8 +26,8 @@ class G2PRegId(models.Model):
     auth_oauth_provider_id = fields.Many2one("auth.oauth.provider", related="id_type.auth_oauth_provider_id")
 
     @api.model
-    def get_auth_oauth_provider(self, id):
-        reg_id = self.sudo().browse(id)
+    def get_auth_oauth_provider(self, reg_id_id):
+        reg_id = self.sudo().browse(reg_id_id)
         if reg_id.auth_oauth_provider_id:
             params = (
                 self.env["auth.oauth.provider"]
