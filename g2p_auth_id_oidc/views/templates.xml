@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="g2p_reg_id_confirm" name="Confirm">
+        <t t-call="web.layout">
+            <t t-set="title">Confirm</t>
+            <t t-set="head">
+                <script type="text/javascript">
+                    function redirectToAuthenticate(urlParams){
+                        if(!urlParams){
+                            urlParams = new URLSearchParams(location.search);
+                        }
+                        location = `${location.origin}/auth_oauth/g2p_registry_id/authenticate?${urlParams}`
+                    }
+                    function authenticateWithUpdate(){
+                        let urlParams = new URLSearchParams(location.search);
+                        urlParams.set("confirm_update", true);
+                        return redirectToAuthenticate(urlParams);
+                    }
+                </script>
+            </t>
+            <div class="card" id="auth_response">
+                <h1>Do you want to override registry data with data from ID Provider?</h1>
+                <p />
+                <button onclick="authenticateWithUpdate()">Yes</button>
+                <button onclick="redirectToAuthenticate()">No</button>
+            </div>
+        </t>
+    </template>
+    <template id="g2p_reg_id_authenticate" name="Authenticate">
+        <t t-call="web.layout">
+            <t t-set="title">Authenticate</t>
+            <t t-if="authentication_status">
+                <script>window.close()</script>
+            </t>
+            <t t-else="">
+                <div class="card" id="auth_response">
+                    <p>Encountered error while authenticating Reg Id.</p>
+                    <t t-if="debug">
+                        <p><t t-out="error_exception" /></p>
+                    </t>
+                    <button onclick="window.close()">Ok</button>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

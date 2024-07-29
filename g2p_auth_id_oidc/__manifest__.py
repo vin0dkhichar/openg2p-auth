@@ -8,14 +8,19 @@
     "website": "https://openg2p.org",
     "license": "Other OSI approved licence",
     "development_status": "Alpha",
-    # TODO: Find a replacement for auth_oidc module.
-    # Temporarily using auth_oauth.
-    "depends": ["auth_oauth", "g2p_registry_base"],
+    "depends": ["g2p_auth_oidc", "g2p_registry_individual", "g2p_registry_group"],
     "data": [
         "views/g2p_auth_id_oidc_provider.xml",
+        "views/g2p_id_type.xml",
+        "views/individual.xml",
+        "views/group.xml",
+        "views/templates.xml",
     ],
     "assets": {
-        "web.assets_backend": [],
+        "web.assets_backend": [
+            "g2p_auth_id_oidc/static/src/js/authentication_status.js",
+            "g2p_auth_id_oidc/static/src/xml/authentication_status.xml",
+        ],
         "web.assets_qweb": [],
     },
     "demo": [],
