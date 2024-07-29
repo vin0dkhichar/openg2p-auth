@@ -14,13 +14,45 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: g2p_auth_id_oidc
-#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__default_group_user_creation
-msgid "Default Group User Creation"
+#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_g2p_id_type__auth_oauth_provider_id
+#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_g2p_reg_id__auth_oauth_provider_id
+msgid "Auth Oauth Provider"
 msgstr ""
 
 #. module: g2p_auth_id_oidc
-#: model:ir.model.fields,help:g2p_auth_id_oidc.field_auth_oauth_provider__partner_creation_date_format
-msgid "Format of date to be used while Partner Creation"
+#. odoo-javascript
+#: code:addons/g2p_auth_id_oidc/static/src/xml/authentication_status.xml:0
+#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_authenticate
+#, python-format
+msgid "Authenticate"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields.selection,name:g2p_auth_id_oidc.selection__g2p_reg_id__authentication_status__authenticated
+msgid "Authenticated"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#. odoo-javascript
+#: code:addons/g2p_auth_id_oidc/static/src/js/authentication_status.js:0
+#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_g2p_reg_id__authentication_status
+#, python-format
+msgid "Authentication Status"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_confirm
+msgid "Confirm"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_confirm
+msgid "Do you want to override registry data with data from ID Provider?"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_authenticate
+msgid "Encountered error while authenticating Reg Id."
 msgstr ""
 
 #. module: g2p_auth_id_oidc
@@ -34,18 +66,28 @@ msgid "G2P Registrant ID Type"
 msgstr ""
 
 #. module: g2p_auth_id_oidc
-#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__login_attribute_mapping_on_user_creation
-msgid "Login Attribute Mapping On User Creation"
+#: model:ir.model,name:g2p_auth_id_oidc.model_g2p_id_type
+msgid "ID Type"
 msgstr ""
 
 #. module: g2p_auth_id_oidc
-#: model:ir.model.fields,help:g2p_auth_id_oidc.field_auth_oauth_provider__partner_creation_validate_response_mapping
-msgid "Map Fields from Validation_url response while Partner Creation"
+#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_g2p_reg_id__last_authentication_time
+msgid "Last Authentication Time"
 msgstr ""
 
 #. module: g2p_auth_id_oidc
-#: model:ir.model.fields,help:g2p_auth_id_oidc.field_auth_oauth_provider__login_attribute_mapping_on_user_creation
-msgid "Map login attribure from validation response on User Creation"
+#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_g2p_reg_id__last_authentication_user_id
+msgid "Last Authentication User"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_confirm
+msgid "No"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
+#: model:ir.model.fields.selection,name:g2p_auth_id_oidc.selection__g2p_reg_id__authentication_status__not_authenticated
+msgid "Not authenticated"
 msgstr ""
 
 #. module: g2p_auth_id_oidc
@@ -54,36 +96,16 @@ msgid "OAuth2 provider"
 msgstr ""
 
 #. module: g2p_auth_id_oidc
-#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__partner_creation_call_validate_url
-msgid "Partner Creation Call Validate Url"
+#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_authenticate
+msgid "Ok"
 msgstr ""
 
 #. module: g2p_auth_id_oidc
-#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__partner_creation_date_format
-msgid "Partner Creation Date Format"
+#: model:ir.model,name:g2p_auth_id_oidc.model_g2p_reg_id
+msgid "Registrant ID"
 msgstr ""
 
 #. module: g2p_auth_id_oidc
-#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__partner_creation_validate_response_mapping
-msgid "Partner Creation Validate Response Mapping"
-msgstr ""
-
-#. module: g2p_auth_id_oidc
-#: model:ir.model.fields,help:g2p_auth_id_oidc.field_auth_oauth_provider__default_group_user_creation
-msgid "This will be set as default group on user creation"
-msgstr ""
-
-#. module: g2p_auth_id_oidc
-#: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_auth_oauth_provider__g2p_oidc_id_to_use
-msgid "Use G2P Reg ID"
-msgstr ""
-
-#. module: g2p_auth_id_oidc
-#: model:ir.model,name:g2p_auth_id_oidc.model_res_users
-msgid "User"
-msgstr ""
-
-#. module: g2p_auth_id_oidc
-#: model:ir.model.fields,help:g2p_auth_id_oidc.field_auth_oauth_provider__partner_creation_call_validate_url
-msgid "Whether to call Validation Url for data during Partner Creation"
+#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_confirm
+msgid "Yes"
 msgstr ""
