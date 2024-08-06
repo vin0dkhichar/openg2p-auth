@@ -34,7 +34,7 @@ class G2PRegId(models.Model):
                 .sudo()
                 .list_providers(
                     domain=[("id", "=", reg_id.auth_oauth_provider_id.id)],
-                    oidc_redirect_uri="/auth_oauth/g2p_registry_id/confirm",
+                    oidc_redirect_uri="/auth_oauth/g2p_registry_id/authenticate",
                     reg_id=reg_id.id,
                 )[0]
             )
