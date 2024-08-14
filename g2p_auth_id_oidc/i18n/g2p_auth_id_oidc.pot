@@ -33,6 +33,11 @@ msgid "Authenticated"
 msgstr ""
 
 #. module: g2p_auth_id_oidc
+#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_authenticate
+msgid "Authentication Response:"
+msgstr ""
+
+#. module: g2p_auth_id_oidc
 #. odoo-javascript
 #: code:addons/g2p_auth_id_oidc/static/src/js/authentication_status.js:0
 #: model:ir.model.fields,field_description:g2p_auth_id_oidc.field_g2p_reg_id__authentication_status
@@ -41,13 +46,8 @@ msgid "Authentication Status"
 msgstr ""
 
 #. module: g2p_auth_id_oidc
-#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_confirm
-msgid "Confirm"
-msgstr ""
-
-#. module: g2p_auth_id_oidc
-#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_confirm
-msgid "Do you want to override registry data with data from ID Provider?"
+#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_authenticate
+msgid "Authentication Success"
 msgstr ""
 
 #. module: g2p_auth_id_oidc
@@ -81,11 +81,6 @@ msgid "Last Authentication User"
 msgstr ""
 
 #. module: g2p_auth_id_oidc
-#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_confirm
-msgid "No"
-msgstr ""
-
-#. module: g2p_auth_id_oidc
 #: model:ir.model.fields.selection,name:g2p_auth_id_oidc.selection__g2p_reg_id__authentication_status__not_authenticated
 msgid "Not authenticated"
 msgstr ""
@@ -103,9 +98,4 @@ msgstr ""
 #. module: g2p_auth_id_oidc
 #: model:ir.model,name:g2p_auth_id_oidc.model_g2p_reg_id
 msgid "Registrant ID"
-msgstr ""
-
-#. module: g2p_auth_id_oidc
-#: model_terms:ir.ui.view,arch_db:g2p_auth_id_oidc.g2p_reg_id_confirm
-msgid "Yes"
 msgstr ""
